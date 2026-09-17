@@ -474,6 +474,37 @@ const stars = [
         description: 'Ancient Chinese movement practice. Cultivating and balancing life energy through slow, intentional forms.',
         image: null,
         links: []
+    },
+
+    // ═══════════════════════════════════════════════════════════
+    // Standalone — not tied to any cloud
+    // ═══════════════════════════════════════════════════════════
+    {
+        id: 'earth',
+        name: 'Where I\'ll Be',
+        type: 'currently roaming',
+        variant: 'planet',
+        x: 12,
+        y: 68,
+        size: 26,
+        color: '#4a9eff',
+        labelPosition: 'bottom',
+        description: 'Oct–Nov: Spain / Portugal\nDec–Jan: Thailand (meditating)\nJan onward: ???\nMay–Aug: probably The Garden, Portugal',
+        image: null,
+        links: []
+    },
+    {
+        id: 'bucket-list',
+        name: 'Bucket List',
+        type: 'someday',
+        x: 90,
+        y: 62,
+        size: 10,
+        color: '#e8d5f5',
+        labelPosition: 'bottom',
+        description: 'Take an acting course\nPlay in a summer theatre show\nLearn Dutch to C1\nMake a techno beat in Ableton\n???',
+        image: null,
+        links: []
     }
 ];
 

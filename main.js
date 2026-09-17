@@ -599,7 +599,7 @@
 
     function createStarElement(star, className, allowClickable = true) {
         const $star = document.createElement('div');
-        $star.className = `star ${className}`;
+        $star.className = `star ${className}` + (star.variant === 'planet' ? ' star-planet' : '');
         $star.dataset.starId = star.id;
         
         const x = (star.x / 100) * config.universeWidth;
