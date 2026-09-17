@@ -64,61 +64,12 @@
         const maxWidth = 1400;
         const maxHeight = 900;
 
-        const isMobile = window.innerWidth < 768;
-
-        // On mobile, use actual viewport; on desktop, clamp between min and max
-        if (isMobile) {
-            config.universeWidth = window.innerWidth;
-            config.universeHeight = window.innerHeight;
-        } else {
-            config.universeWidth = Math.min(Math.max(window.innerWidth, minWidth), maxWidth);
-            config.universeHeight = Math.min(Math.max(window.innerHeight, minHeight), maxHeight);
-        }
-        
         const universe = document.getElementById('universe');
-        universe.style.width = config.universeWidth + 'px';
-        universe.style.height = config.universeHeight + 'px';
-        
-        // On mobile, fill viewport; on desktop, center
-        if (isMobile) {
-            universe.style.left = '0';
-            universe.style.top = '0';
-            universe.style.transform = 'none';
-        } else {
-            // Desktop: center the universe if viewport is larger than content area
-            if (window.innerWidth > config.universeWidth) {
-                universe.style.left = '50%';
-                universe.style.transform = 'translateX(-50%)';
-            } else {
-                universe.style.left = '0';
-                universe.style.transform = 'none';
-            }
-            
-            // For vertical: center if viewport is taller
-            if (window.innerHeight > config.universeHeight) {
-                universe.style.top = '50%';
-                universe.style.transform = universe.style.transform === 'translateX(-50%)' 
-                    ? 'translate(-50%, -50%)' 
-                    : 'translateY(-50%)';
-            } else {
-                universe.style.top = '0';
-                if (universe.style.transform === 'translate(-50%, -50%)') {
-                    universe.style.transform = 'translateX(-50%)';
-                } else if (universe.style.transform === 'translateY(-50%)') {
-                    universe.style.transform = 'none';
-                }
-            }
-        }
-        
-        [$cloudsLayer, $starsLayer, $fallingStarsLayer, $curiosityBackgroundLayer].forEach(layer => {
-            layer.style.width = config.universeWidth + 'px';
-            layer.style.height = config.universeHeight + 'px';
-        });
-        
-        // Handle resize
-        window.addEventListener('resize', debounce(() => {
+
+        function applySize() {
             const isMobile = window.innerWidth < 768;
 
+            // On mobile, use actual viewport; on desktop, clamp between min and max
             if (isMobile) {
                 config.universeWidth = window.innerWidth;
                 config.universeHeight = window.innerHeight;
@@ -126,46 +77,38 @@
                 config.universeWidth = Math.min(Math.max(window.innerWidth, minWidth), maxWidth);
                 config.universeHeight = Math.min(Math.max(window.innerHeight, minHeight), maxHeight);
             }
-            
+
             universe.style.width = config.universeWidth + 'px';
             universe.style.height = config.universeHeight + 'px';
-            
-            // On mobile, fill viewport; on desktop, center
+
             if (isMobile) {
+                // Mobile: fill viewport, no scaling needed
                 universe.style.left = '0';
                 universe.style.top = '0';
                 universe.style.transform = 'none';
             } else {
-                // Desktop: center horizontally
-                if (window.innerWidth > config.universeWidth) {
-                    universe.style.left = '50%';
-                    universe.style.transform = 'translateX(-50%)';
-                } else {
-                    universe.style.left = '0';
-                    universe.style.transform = 'none';
-                }
-                
-                // Center vertically  
-                if (window.innerHeight > config.universeHeight) {
-                    universe.style.top = '50%';
-                    universe.style.transform = universe.style.transform === 'translateX(-50%)' 
-                        ? 'translate(-50%, -50%)' 
-                        : 'translateY(-50%)';
-                } else {
-                    universe.style.top = '0';
-                    if (universe.style.transform === 'translate(-50%, -50%)') {
-                        universe.style.transform = 'translateX(-50%)';
-                    } else if (universe.style.transform === 'translateY(-50%)') {
-                        universe.style.transform = 'none';
-                    }
-                }
+                // Desktop: always center, and scale down to fit when the viewport
+                // is smaller than the (min 900x700) content area — otherwise it
+                // would overflow past the edge of the screen and get clipped by
+                // body's overflow: hidden (e.g. tablets, split-screen windows).
+                const scale = Math.min(
+                    window.innerWidth / config.universeWidth,
+                    window.innerHeight / config.universeHeight,
+                    1
+                );
+                universe.style.left = '50%';
+                universe.style.top = '50%';
+                universe.style.transform = `translate(-50%, -50%) scale(${scale})`;
             }
-            
-            [$cloudsLayer, $starsLayer, $fallingStarsLayer].forEach(layer => {
+
+            [$cloudsLayer, $starsLayer, $fallingStarsLayer, $curiosityBackgroundLayer].forEach(layer => {
                 layer.style.width = config.universeWidth + 'px';
                 layer.style.height = config.universeHeight + 'px';
             });
-        }, 100));
+        }
+
+        applySize();
+        window.addEventListener('resize', debounce(applySize, 100));
     }
     
     // Simple debounce helper
