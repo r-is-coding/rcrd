@@ -181,19 +181,6 @@ const colivingSpaces = [
         links: [{ text: 'traditionaldreamfactory.com', url: 'https://www.traditionaldreamfactory.com/' }]
     },
 
-    {
-        id: 'life-itself',
-        name: 'Life Itself',
-        place: 'Bergerac, Dordogne, France',
-        category: 'garden',
-        lat: 44.8510,
-        lng: 0.4820,
-        status: 'notyet',
-        priceFrom: 350,
-        why: 'A residential hub in a riverside manor in Bergerac, where hippie-rationalist culture overlaps with EA: impact-minded, with room for wisdom and inner work. A lovely house, though reportedly not the most smoothly organised.',
-        practical: '€350–850/month plus food · 1 week to 3 months · apply',
-        links: [{ text: 'lifeitself.org', url: 'https://lifeitself.org/residencies' }]
-    },
 
     // ── EA / rationalist / AI safety ───────────────────────────
     {

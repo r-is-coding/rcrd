@@ -88,16 +88,35 @@
 
     // Country outlines from Natural Earth (no API key needed)
     map.attributionControl.setPrefix(false).addAttribution('<a href="https://www.naturalearthdata.com/">Natural Earth</a> · Equal Earth projection');
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
-        .then(r => r.json())
-        .then(topo => {
-            L.geoJSON(fixAntimeridian(topojson.feature(topo, topo.objects.countries)), {
-                renderer: renderer('land'),
-                interactive: false,
-                style: { color: 'rgba(168, 212, 255, 0.28)', weight: 0.6, fillColor: '#1a1530', fillOpacity: 1 }
-            }).addTo(map);
-        })
-        .catch(() => { /* map still works, just without outlines */ });
+    // Medium detail loads first. Small islands (e.g. Aegina) only exist in the
+    // high-detail set (~1 MB), so that loads the first time someone zooms in.
+    const ATLAS = 'https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/';
+    const landStyle = { color: 'rgba(168, 212, 255, 0.28)', weight: 0.6, fillColor: '#1a1530', fillOpacity: 1 };
+    let land = null;
+    let detailed = 'no'; // 'no' | 'loading' | 'yes'
+
+    function loadLand(file) {
+        return fetch(ATLAS + file)
+            .then(r => r.json())
+            .then(topo => {
+                if (file.includes('50m') && detailed === 'yes') return; // detail already won the race
+                const layer = L.geoJSON(fixAntimeridian(topojson.feature(topo, topo.objects.countries)), {
+                    renderer: renderer('land'), interactive: false, style: landStyle
+                }).addTo(map);
+                if (land) land.remove();
+                land = layer;
+            });
+    }
+
+    loadLand('countries-50m.json').catch(() => { /* map still works, just without outlines */ });
+
+    map.on('zoomend', () => {
+        if (detailed !== 'no' || map.getZoom() < 5.5) return;
+        detailed = 'loading';
+        loadLand('countries-10m.json')
+            .then(() => { detailed = 'yes'; })
+            .catch(() => { detailed = 'no'; });
+    });
 
     const $list = document.getElementById('places');
     const $filters = document.getElementById('filters');
