@@ -34,9 +34,9 @@ const colivingCategories = [
         description: 'Cleanly EA, rationalist and AI safety.'
     },
     {
-        id: 'leftist',
-        name: 'Leftist / anarchist',
-        short: 'leftist',
+        id: 'selforg',
+        name: 'Self-organized',
+        short: 'self-organized',
         color: '#f48fb1',
         description: 'Collectively run, cheap and minimal. Expect to pitch in.'
     },
@@ -203,12 +203,12 @@ const colivingSpaces = [
         links: [{ text: 'ceealar.org', url: 'https://www.ceealar.org/' }]
     },
 
-    // ── Leftist / anarchist ────────────────────────────────────
+    // ── Self-organized ────────────────────────────────────────
     {
         id: 'massia',
         name: 'MASSIA',
         place: 'Massiaru, Estonia',
-        category: 'leftist',
+        category: 'selforg',
         lat: 57.9986,
         lng: 24.5885,
         status: 'been',
@@ -221,7 +221,7 @@ const colivingSpaces = [
         id: 'kanthaus',
         name: 'Kanthaus',
         place: 'Wurzen, near Leipzig, Germany',
-        category: 'leftist',
+        category: 'selforg',
         lat: 51.3660,
         lng: 12.7390,
         status: 'notyet',
