@@ -300,3 +300,20 @@ body {
     letter-spacing: 0.03em;
     color: var(--text-faint);
 }
+
+/* "← all places": shown while a filter is on */
+.reset {
+    align-self: flex-start;
+    margin-top: 0.2rem;
+    padding: 0.2rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+.reset:hover { border-bottom-color: var(--text); }
+.reset[hidden] { display: none; }

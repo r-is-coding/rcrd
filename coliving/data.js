@@ -20,11 +20,11 @@ const colivingCategories = [
         description: 'Hippy + rationalist, TPOT-esque. The Garden and everything that feels connected to it.'
     },
     {
-        id: 'inta',
-        name: 'Integral altruism (int/a)',
-        short: 'int/a',
+        id: 'between',
+        name: 'Between the Garden and EA',
+        short: 'in between',
         color: '#ffd89b',
-        description: 'Somewhere between the Garden-esque places and the EA ones: EA-minded, but with more room for wisdom, culture and inner work.'
+        description: 'Where the Garden-esque and EA worlds overlap: EA-minded, with more room for wisdom, culture and inner work. Int/a-adjacent.'
     },
     {
         id: 'ea',
@@ -109,7 +109,7 @@ const colivingSpaces = [
         category: 'garden',
         lat: 39.0190,
         lng: -9.1510,
-        status: 'notyet',
+        status: 'been',
         why: 'Similar to The Garden, but smaller.',
         practical: 'rooms €150–525/week, dorms from €70/week, plus a meal fee · 2 weeks recommended · apply with a reference',
         links: [{ text: 'foolsvalley.com', url: 'https://foolsvalley.com/' }]
@@ -166,7 +166,7 @@ const colivingSpaces = [
         id: 'life-itself',
         name: 'Life Itself',
         place: 'Bergerac, Dordogne, France',
-        category: 'inta',
+        category: 'between',
         lat: 44.8510,
         lng: 0.4820,
         status: 'notyet',
@@ -239,8 +239,8 @@ const colivingSpaces = [
         category: 'hacker',
         lat: 53.1460,
         lng: -4.1210,
-        status: 'notyet',
-        why: 'A collective based in a converted chapel in Snowdonia, mixing co-living, coworking and retreats. Residencies for artists and technologists, with a focus on AI and tech, creativity and regeneration. They also run "voyages": immersive retreats for teams on a mission. Haven\'t been.',
+        status: 'been',
+        why: 'A collective based in a converted chapel in Snowdonia, mixing co-living, coworking and retreats. Residencies for artists and technologists, with a focus on AI and tech, creativity and regeneration. They also run "voyages": immersive retreats for teams on a mission.',
         practical: 'book a call to ask about prices and residencies',
         links: [{ text: 'astralship.org', url: 'https://astralship.org/' }]
     },

@@ -145,18 +145,69 @@
         if (scroll) entry.$item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function applyFilter() {
+    function isFiltered() {
+        return filter.category !== 'all' || filter.beenOnly;
+    }
+
+    function fitTo(points) {
+        if (points.length === 1) map.flyTo(points[0], 6, { duration: 1 });
+        else if (points.length > 1) map.flyToBounds(L.latLngBounds(points), { padding: [40, 40], maxZoom: 5, duration: 1 });
+    }
+
+    function applyFilter({ fit = true } = {}) {
         const visibleCount = new Map();
+        const points = [];
         entries.forEach(entry => {
             const s = entry.space;
             const show = (filter.category === 'all' || s.category === filter.category) &&
                          (!filter.beenOnly || s.status === 'been');
             entry.$item.hidden = !show;
-            if (show) entry.marker.addTo(map); else entry.marker.remove();
-            if (show) visibleCount.set(s.category, (visibleCount.get(s.category) || 0) + 1);
+            if (show) {
+                entry.marker.addTo(map);
+                points.push([s.lat, s.lng]);
+                visibleCount.set(s.category, (visibleCount.get(s.category) || 0) + 1);
+            } else {
+                entry.marker.remove();
+                if (activeId === s.id) { setActive(entry, false); activeId = null; }
+            }
         });
         groups.forEach(($group, id) => { $group.hidden = !visibleCount.get(id); });
+
+        $catRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x.dataset.category === filter.category));
+        $been.classList.toggle('is-active', filter.beenOnly);
+        $been.setAttribute('aria-pressed', String(filter.beenOnly));
+        $reset.hidden = !isFiltered();
+        if (fit) fitTo(points);
     }
+
+    // Filters live in the URL hash (#ea, #been, #ea+been), so the browser
+    // back button steps back through them.
+    function filterToHash() {
+        const parts = [];
+        if (filter.category !== 'all') parts.push(filter.category);
+        if (filter.beenOnly) parts.push('been');
+        return parts.length ? '#' + parts.join('+') : '';
+    }
+
+    function filterFromHash() {
+        const parts = location.hash.replace(/^#/, '').split('+').filter(Boolean);
+        return {
+            category: parts.find(p => categories.has(p)) || 'all',
+            beenOnly: parts.includes('been')
+        };
+    }
+
+    function setFilter(next) {
+        Object.assign(filter, next);
+        const hash = filterToHash();
+        if (hash !== location.hash) history.pushState(null, '', hash || location.pathname + location.search);
+        applyFilter();
+    }
+
+    window.addEventListener('popstate', () => {
+        Object.assign(filter, filterFromHash());
+        applyFilter();
+    });
 
     // ── Filters ──
     function chip(label, color, onClick) {
@@ -168,35 +219,34 @@
             $c.appendChild($d);
         }
         $c.appendChild(document.createTextNode(label));
-        $c.addEventListener('click', () => onClick($c));
+        $c.addEventListener('click', onClick);
         return $c;
     }
 
+    const $reset = el('button', 'reset', '← all places');
+    $reset.type = 'button';
+    $reset.hidden = true;
+    $reset.addEventListener('click', () => setFilter({ category: 'all', beenOnly: false }));
+
     const $catRow = el('div', 'filter-row');
-    const pickCategory = (id) => ($c) => {
-        filter.category = id;
-        $catRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x === $c));
-        applyFilter();
-    };
-    const $all = chip('all', null, pickCategory('all'));
-    $all.classList.add('is-active');
+    const $all = chip('all', null, () => setFilter({ category: 'all' }));
+    $all.dataset.category = 'all';
     $catRow.appendChild($all);
-    colivingCategories.forEach(c => $catRow.appendChild(chip(c.short || c.name, c.color, pickCategory(c.id))));
-    $filters.appendChild($catRow);
+    colivingCategories.forEach(c => {
+        // Clicking the active category again goes back to all
+        const $c = chip(c.short || c.name, c.color, () => setFilter({ category: filter.category === c.id ? 'all' : c.id }));
+        $c.dataset.category = c.id;
+        $catRow.appendChild($c);
+    });
 
     const $statusRow = el('div', 'filter-row');
-    const $been = chip('only where I\'ve been', null, ($c) => {
-        filter.beenOnly = !filter.beenOnly;
-        $c.classList.toggle('is-active', filter.beenOnly);
-        $c.setAttribute('aria-pressed', String(filter.beenOnly));
-        applyFilter();
-    });
-    $been.setAttribute('aria-pressed', 'false');
+    const $been = chip('only where I\'ve been', null, () => setFilter({ beenOnly: !filter.beenOnly }));
     $statusRow.appendChild($been);
     const $legend = el('span', 'legend');
     $legend.innerHTML = '<span class="dot dot-been"></span>been <span class="dot dot-notyet"></span>not yet';
     $statusRow.appendChild($legend);
-    $filters.appendChild($statusRow);
+
+    $filters.append($catRow, $statusRow, $reset);
 
     // ── List, grouped by category; places I've been come first ──
     const statusOrder = { been: 0, notyet: 1 };
@@ -224,7 +274,10 @@
 
     if (!entries.size) $list.appendChild(el('li', 'empty', 'Nothing here yet.'));
 
-    // Open on Europe-ish: fit everything, but don't zoom in too far
-    const all = [...entries.values()].map(e => [e.space.lat, e.space.lng]);
-    if (all.length > 1) map.fitBounds(L.latLngBounds(all), { padding: [40, 40], maxZoom: 5 });
+    // Start from the filter in the URL, if any; otherwise show everything
+    Object.assign(filter, filterFromHash());
+    applyFilter({ fit: false });
+    const visible = [...entries.values()].filter(e => !e.$item.hidden).map(e => [e.space.lat, e.space.lng]);
+    if (visible.length === 1) map.setView(visible[0], 6);
+    else if (visible.length > 1) map.fitBounds(L.latLngBounds(visible), { padding: [40, 40], maxZoom: 5 });
 })();
