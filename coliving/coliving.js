@@ -219,9 +219,19 @@
         return filter.category !== 'all' || filter.beenOnly;
     }
 
-    function fitTo(points) {
-        if (points.length === 1) map.flyTo(points[0], 6, { duration: 1 });
-        else if (points.length > 1) map.flyToBounds(L.latLngBounds(points), { padding: [40, 40], maxZoom: 5, duration: 1 });
+    // Europe is home: if any shown places are in Europe, frame just those.
+    // Places further away appear when you zoom out or filter to them.
+    const EUROPE = L.latLngBounds([34, -25], [72, 45]);
+    function framePoints(points) {
+        const inEurope = points.filter(p => EUROPE.contains(p));
+        return inEurope.length ? inEurope : points;
+    }
+
+    function fitTo(points, animate = true) {
+        points = framePoints(points);
+        const opts = { padding: [40, 40], maxZoom: 5 };
+        if (points.length === 1) animate ? map.flyTo(points[0], 6, { duration: 1 }) : map.setView(points[0], 6);
+        else if (points.length > 1) animate ? map.flyToBounds(L.latLngBounds(points), { ...opts, duration: 1 }) : map.fitBounds(L.latLngBounds(points), opts);
     }
 
     function applyFilter({ fit = true } = {}) {
@@ -400,7 +410,5 @@
     // Start from the filter in the URL, if any; otherwise show everything
     Object.assign(filter, filterFromHash());
     applyFilter({ fit: false });
-    const visible = [...entries.values()].filter(e => !e.$item.hidden).map(e => [e.space.lat, e.space.lng]);
-    if (visible.length === 1) map.setView(visible[0], 6);
-    else if (visible.length > 1) map.fitBounds(L.latLngBounds(visible), { padding: [40, 40], maxZoom: 5 });
+    fitTo([...entries.values()].filter(e => !e.$item.hidden).map(e => [e.space.lat, e.space.lng]), false);
 })();
