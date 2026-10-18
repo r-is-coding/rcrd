@@ -20,6 +20,13 @@ const colivingCategories = [
         description: 'Hippy + rationalist, TPOT-esque. The Garden and everything that feels connected to it.'
     },
     {
+        id: 'inta',
+        name: 'Integral altruism (int/a)',
+        short: 'int/a',
+        color: '#ffd89b',
+        description: 'Somewhere between the Garden-esque places and the EA ones: EA-minded, but with more room for wisdom, culture and inner work.'
+    },
+    {
         id: 'ea',
         name: 'EA / rationalist / AI safety',
         short: 'EA',
@@ -38,7 +45,7 @@ const colivingCategories = [
         name: 'Hackerish',
         short: 'hacker',
         color: '#7ee0c3',
-        description: ''
+        description: 'Tech and AI, in a more experimental key.'
     },
     {
         id: 'coworking',
@@ -78,7 +85,9 @@ const colivingSpaces = [
         status: 'been',
         verdict: '',
         when: 'probably back May–Aug',
-        why: 'A magical forest you sometimes get lost in while walking around northern Portugal. Inhabited by fairies and forest elves who give you tea and tell you stories. You will miss them.',
+        why: 'A magical forest you sometimes get lost in while walking around northern Portugal. Inhabited by fairies and forest elves who give you tea and tell you stories. You will miss them.\n\nRational hippies. Go there to downregulate, touch grass, rest and cuddle.',
+        goodFor: ['resting and downregulating', 'community, cuddles, nature'],
+        notFor: ['intense coworking (though coworking is definitely possible)'],
         practical: '€220/week sliding scale, 3 meals included · 1 week minimum · apply',
         links: [{ text: 'labs.thegarden.pt', url: 'https://labs.thegarden.pt/' }]
     },
@@ -90,7 +99,7 @@ const colivingSpaces = [
         lat: 41.45,  // placeholder: exact location unknown
         lng: -8.2,
         status: 'notyet',
-        why: '',
+        why: 'Part of the same northern Portugal scene. No website I know of.',
         links: []
     },
     {
@@ -101,7 +110,7 @@ const colivingSpaces = [
         lat: 39.0190,
         lng: -9.1510,
         status: 'notyet',
-        why: 'Similar to The Garden.',
+        why: 'Similar to The Garden, but smaller.',
         practical: 'rooms €150–525/week, dorms from €70/week, plus a meal fee · 2 weeks recommended · apply with a reference',
         links: [{ text: 'foolsvalley.com', url: 'https://foolsvalley.com/' }]
     },
@@ -113,7 +122,7 @@ const colivingSpaces = [
         lat: 48.0130,
         lng: 3.3310,
         status: 'notyet',
-        why: 'Similar to The Garden.',
+        why: "Similar to The Garden, probably pricier. Usually opens in December, I think. Haven't been.",
         practical: '€1,000–3,000/month, food extra · 2 weeks to 4 months · apply',
         links: [{ text: 'feytopia.com', url: 'https://feytopia.com/' }]
     },
@@ -125,7 +134,7 @@ const colivingSpaces = [
         lat: 41.6100,
         lng: 2.5400,
         status: 'notyet',
-        why: 'Similar to The Garden, but with even more workshops and events. Slightly more expensive.',
+        why: "Similar to The Garden, but with even more workshops and events. Slightly more expensive. Run by a married couple, one of them Richard D. Bartlett. Haven't been.",
         practical: '1 week to 1 month stays',
         links: [{ text: 'eltilo.casa', url: 'https://www.eltilo.casa/' }]
     },
@@ -148,15 +157,16 @@ const colivingSpaces = [
         category: 'garden',
         lat: 41.6156,
         lng: -8.4253,
-        status: 'notyet',
-        why: 'Kind of similar to The Garden, but more for events than residencies, I think. Not sure.',
+        status: 'been',
+        when: 'for an event',
+        why: 'Nice place. Kind of similar to The Garden, but more for events than residencies, I think.',
         links: [{ text: 'coliven.com', url: 'https://coliven.com/communities/udyana-sanctuary' }]
     },
     {
         id: 'life-itself',
         name: 'Life Itself',
         place: 'Bergerac, Dordogne, France',
-        category: 'garden',
+        category: 'inta',
         lat: 44.8510,
         lng: 0.4820,
         status: 'notyet',
@@ -173,8 +183,8 @@ const colivingSpaces = [
         category: 'ea',
         lat: 49.8480,
         lng: 15.4928,
-        status: 'notyet',
-        why: 'A great EA / AI safety / rationalist place in Czechia.',
+        status: 'been',
+        why: 'A great EA / AI safety / rationalist place in Czechia. What makes it is the programme and the facilitation.',
         practical: '€10–70/day sliding scale, all-inclusive · autumn season · apply',
         links: [{ text: 'fall.hostacov.com', url: 'https://fall.hostacov.com/' }]
     },
@@ -185,8 +195,10 @@ const colivingSpaces = [
         category: 'ea',
         lat: 53.8100,
         lng: -3.0540,
-        status: 'notyet',
-        why: '',
+        status: 'been',
+        verdict: "yes, if you're working on something important",
+        why: 'For people working on important global problems, especially AI safety, who want to live on a €0 budget.',
+        goodFor: ['starting a startup, a charity or another project', 'AI safety work'],
         practical: 'free to £900/month for grantees, £30+/night self-funded · apply',
         links: [{ text: 'ceealar.org', url: 'https://www.ceealar.org/' }]
     },
@@ -199,8 +211,9 @@ const colivingSpaces = [
         category: 'leftist',
         lat: 57.9986,
         lng: 24.5885,
-        status: 'notyet',
-        why: '',
+        status: 'been',
+        why: 'The vibe lends itself nicely to writing, painting and that kind of work.',
+        goodFor: ['writing, painting, creative work'],
         practical: '€15–20/night, solidarity month on request · 1 hour/day of care work',
         links: [{ text: 'massia.ee', url: 'https://www.massia.ee/' }]
     },
@@ -227,7 +240,8 @@ const colivingSpaces = [
         lat: 53.1460,
         lng: -4.1210,
         status: 'notyet',
-        why: '',
+        why: 'A collective based in a converted chapel in Snowdonia, mixing co-living, coworking and retreats. Residencies for artists and technologists, with a focus on AI and tech, creativity and regeneration. They also run "voyages": immersive retreats for teams on a mission. Haven\'t been.',
+        practical: 'book a call to ask about prices and residencies',
         links: [{ text: 'astralship.org', url: 'https://astralship.org/' }]
     },
 
@@ -240,7 +254,7 @@ const colivingSpaces = [
         lat: 39.6580,
         lng: -0.4250,
         status: 'notyet',
-        why: '',
+        why: 'Haven\'t been.',
         practical: '€1,200–2,100/month · 1 month minimum · alcohol-free',
         links: [{ text: 'savicoliving.com', url: 'https://savicoliving.com/' }]
     },
