@@ -1186,7 +1186,7 @@ body.curiosity-mode #curiosity-toggle .toggle-icon {
 .falling-text {
     font-family: var(--font-display);
     font-size: 1.1rem;
-    font-style: italic;
+    font-style: normal;
     font-weight: 400;
     line-height: 2;
     color: rgba(255, 255, 255, 0.85);
