@@ -47,8 +47,10 @@
         renderGasClouds();
         renderStars();
         renderCuriosityStars();
-        renderBlackHole();
-        generatePortalStarfield();
+        if (blackHole.enabled) {
+            renderBlackHole();
+            generatePortalStarfield();
+        }
         resolveOverlaps();
         applySavedPositions();
         bindEvents();
@@ -125,12 +127,11 @@
        ───────────────────────────────────────────────────────────── */
     
     function createParticles() {
+        // Quiet palette, matching the co-living map
         const colors = [
-            'rgba(167, 139, 250, 0.7)',  // purple
-            'rgba(244, 114, 182, 0.6)',  // pink
-            'rgba(96, 165, 250, 0.6)',   // blue
-            'rgba(45, 212, 191, 0.5)',   // teal
-            'rgba(255, 255, 255, 0.5)'   // white
+            'rgba(255, 255, 255, 0.45)',
+            'rgba(168, 212, 255, 0.45)',
+            'rgba(255, 216, 155, 0.35)'
         ];
 
         // Calculate black hole position in viewport % to clear particles near it
@@ -147,7 +148,7 @@
             const particle = document.createElement('div');
             particle.className = 'particle';
 
-            const size = Math.random() * 3 + 1;
+            const size = Math.random() * 2 + 0.8;
             const color = colors[Math.floor(Math.random() * colors.length)];
 
             // Keep generating positions until outside the black hole zone
@@ -156,6 +157,7 @@
                 posX = Math.random() * 100;
                 posY = Math.random() * 100;
             } while (
+                blackHole.enabled &&
                 Math.pow((posX - bhVpX) / exRadX, 2) +
                 Math.pow((posY - bhVpY) / exRadY, 2) < 1
             );
@@ -200,7 +202,7 @@
                 top: ${y - cloud.size / 2}px;
                 width: ${cloud.size}px;
                 height: ${cloud.size}px;
-                background: radial-gradient(ellipse at center, ${cloud.color} 0%, ${cloud.color.replace(/[\d.]+\)$/, '0.1)')} 50%, transparent 70%);
+                --cloud-color: ${cloud.color.replace(/[\d.]+\)$/, '1)')};
             `;
             
             $cloudsLayer.appendChild($cloud);
@@ -245,6 +247,7 @@
         
         $title.textContent = cloud.name;
         $type.textContent = 'cluster';
+        $starModal.style.setProperty('--accent', cloud.color.replace(/[\d.]+\)$/, '1)'));
         $description.textContent = cloud.description || '';
         
         $imageContainer.innerHTML = '';
@@ -668,6 +671,7 @@
         
         $title.textContent = star.name;
         $type.textContent = star.type;
+        $starModal.style.setProperty('--accent', star.color || '#e8d5f5');
         $description.textContent = star.description || '';
         
         // Handle image

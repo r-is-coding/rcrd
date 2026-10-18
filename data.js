@@ -262,7 +262,8 @@ const stars = [
         description: 'A magical forest you sometimes get lost in while walking around northern Portugal. Inhabited by fairies and forest elves who give you tea and tell you stories. You will miss them.',
         image: null,
         links: [
-            { text: 'thegarden.pt', url: 'https://thegarden.pt/' }
+            { text: 'thegarden.pt', url: 'https://thegarden.pt/' },
+            { text: 'places like this →', url: 'coliving/' }
         ]
     },
 
@@ -472,39 +473,6 @@ const stars = [
         color: '#d4c4a0',
         labelPosition: 'bottom',
         description: 'Ancient Chinese movement practice. Cultivating and balancing life energy through slow, intentional forms.',
-        image: null,
-        links: []
-    },
-
-    // ═══════════════════════════════════════════════════════════
-    // Standalone — not tied to any cloud
-    // ═══════════════════════════════════════════════════════════
-    {
-        id: 'earth',
-        name: 'Where I\'ll Be',
-        type: 'currently roaming',
-        variant: 'planet',
-        x: 12,
-        y: 68,
-        size: 26,
-        color: '#4a9eff',
-        labelPosition: 'bottom',
-        description: 'Oct–Nov: Spain / Portugal\nDec–Jan: Thailand (meditating)\nJan onward: ???\nMay–Aug: probably The Garden, Portugal',
-        image: null,
-        links: [
-            { text: 'co-living spaces I recommend →', url: 'coliving/' }
-        ]
-    },
-    {
-        id: 'bucket-list',
-        name: 'Bucket List',
-        type: 'someday',
-        x: 90,
-        y: 62,
-        size: 10,
-        color: '#e8d5f5',
-        labelPosition: 'bottom',
-        description: 'Take an acting course\nPlay in a summer theatre show\nLearn Dutch to C1\nMake a techno beat in Ableton\n???',
         image: null,
         links: []
     }
@@ -735,6 +703,7 @@ const fallingStars = [
  * BLACK HOLE — Hidden portal to manifesto
  */
 const blackHole = {
+    enabled: false,  // hidden for now; set to true to bring it back
     x: 46,
     y: 50,
     size: 16
