@@ -711,7 +711,7 @@ const fallingStars = [
     {
         id: 'poem-estonian-1',
         text: 'sinu jaoks kerkivad mäed\nja sinu jaoks voolavad ojad\nsinule naeravad lilled\nsinule laulavad luiged\n\nlase siis ka mul\nvormuda mägede järgi\nmoodusatada ehataeva kui sina hõikad\nrõõmust või ängist\nmurest või hirmust\n\net sind õhtuhämaruses kuulata\njääda seisma metsa veerel\nsulle tagasi ümiseda\n\net sina puude kohinat kuuleksid\nja tunneksid tõesti kuidas\nsinu jaoks kajavad mäed\nja vulisevad ojad',
-        translation: 'for you, the mountains rise\nfor you, the rivers flow\nflowers smile\nand swans sing\n\nso let me\ntake the shape of the mountains\nbecome the evening sky as you cry out\nfrom joy or anguish\nworry or fear\n\ni want to hear you in the twilight\nstand still at the edge of the forest\nhumming back at you\n\nso that you could hear my voice like the rustle of the leaves\nand truly feel how\nfor you, the mountains echo\nand rivers gurgle',
+        translation: 'for you, the mountains rise\nfor you, the rivers flow\nthe flowers smile\nand the swans sing\n\nso let me, too,\ntake the shape of the mountains\nbecome the evening sky when you call out\nin joy or anguish\nworry or fear\n\nlet me listen to you in the twilight\nstand still at the edge of the forest\nand hum back to you\n\nso that you could hear my voice in the rustling leaves\nand truly feel how\nfor you, the mountains echo\nand the rivers murmur',
         duration: 25000,
         first: true
     },
