@@ -227,11 +227,28 @@
         return inEurope.length ? inEurope : points;
     }
 
+    // Leaflet's fitBounds works from the corners of a lat/lng box, which
+    // misplaces the centre in Equal Earth (meridians curve). Fit the
+    // projected points themselves instead.
+    function viewFor(points, padding = 40, maxZoom = 5) {
+        const size = map.getSize();
+        for (let z = maxZoom; z >= map.getMinZoom(); z -= 0.25) {
+            const px = L.bounds(points.map(p => map.project(p, z)));
+            const span = px.getSize();
+            if (span.x <= size.x - 2 * padding && span.y <= size.y - 2 * padding) {
+                return { center: map.unproject(px.getCenter(), z), zoom: z };
+            }
+        }
+        const z = map.getMinZoom();
+        return { center: map.unproject(L.bounds(points.map(p => map.project(p, z))).getCenter(), z), zoom: z };
+    }
+
     function fitTo(points, animate = true) {
-        points = framePoints(points);
-        const opts = { padding: [40, 40], maxZoom: 5 };
-        if (points.length === 1) animate ? map.flyTo(points[0], 6, { duration: 1 }) : map.setView(points[0], 6);
-        else if (points.length > 1) animate ? map.flyToBounds(L.latLngBounds(points), { ...opts, duration: 1 }) : map.fitBounds(L.latLngBounds(points), opts);
+        if (filter.category === 'all') points = framePoints(points); // a filtered view shows everything in it
+        if (!points.length) return;
+        const { center, zoom } = points.length === 1 ? { center: points[0], zoom: 6 } : viewFor(points);
+        if (animate) map.flyTo(center, zoom, { duration: 1 });
+        else map.setView(center, zoom);
     }
 
     function applyFilter({ fit = true } = {}) {

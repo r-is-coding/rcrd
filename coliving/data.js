@@ -46,6 +46,13 @@ const colivingCategories = [
         short: 'coworking',
         color: '#a8d4ff',
         description: 'Best when work is the main focus: fewer workshops and ceremonies, more desk time. These sit outside the social circles of the Garden-esque places.'
+    },
+    {
+        id: 'meditation',
+        name: 'Meditation',
+        short: 'meditation',
+        color: '#f5e6c4',
+        description: 'Retreat centres and monasteries, mostly in the Theravada and insight traditions. Not co-living in the usual sense, but places to stay a while and go inward.'
     }
 ];
 
@@ -327,6 +334,56 @@ const colivingSpaces = [
         why: 'A pop-up city inside the Próspera special economic zone on Roatán, focused on longevity biotech, crypto cities and human enhancement. Draws founders, scientists and engineers working on frontier technology, and has a distinctive culture of its own.',
         practical: 'Citizen Pass US$1,000 plus housing from ~US$900/month · check the site for current dates',
         links: [{ text: 'vitalia.city', url: 'https://vitalia.city/' }]
+    },
+
+    // ── Meditation ─────────────────────────────────────────────
+    {
+        id: 'sangha-ee',
+        name: 'Eesti Theeravaada Sangha',
+        place: 'Aegna island, Tallinn, Estonia',
+        category: 'meditation',
+        lat: 59.5850,
+        lng: 24.7600,
+        status: 'notyet',
+        why: 'A Theravada forest monastery on Aegna island, off Tallinn, with weekend meditation retreats, courses and study groups.',
+        practical: 'donation-based · register for activities on the site',
+        links: [{ text: 'sangha.ee', url: 'https://sangha.ee/' }]
+    },
+    {
+        id: 'gaia-house',
+        name: 'Gaia House',
+        place: 'West Ogwell, Devon, England',
+        category: 'meditation',
+        lat: 50.5200,
+        lng: -3.6600,
+        status: 'notyet',
+        why: 'A charity retreat centre in Devon offering silent insight meditation retreats in the Buddhist tradition: group retreats, personal retreats and service retreats.',
+        practical: 'retreat rates plus dana · work-exchange (Dharma Service) retreats and residential coordinator roles',
+        links: [{ text: 'gaiahouse.co.uk', url: 'https://gaiahouse.co.uk/' }]
+    },
+    {
+        id: 'suan-mokkh',
+        name: 'Suan Mokkh International Dharma Hermitage',
+        place: 'Chaiya, Surat Thani, Thailand',
+        category: 'meditation',
+        lat: 9.3380,
+        lng: 99.1680,
+        status: 'notyet',
+        why: 'The international hermitage of Suan Mokkh, founded by Buddhadāsa Bhikkhu, in a coconut grove in southern Thailand. Runs a 10-day silent retreat every month, teaching mindfulness of breathing and the core of the Buddha\'s teaching.',
+        practical: '10-day silent retreat from the 1st of each month · register in person the day before; no advance booking',
+        links: [{ text: 'suanmokkh-idh.org', url: 'https://www.suanmokkh-idh.org/' }]
+    },
+    {
+        id: 'indriya',
+        name: 'Indriya Retreat',
+        place: 'Koh Phangan, Thailand',
+        category: 'meditation',
+        lat: 9.7650,
+        lng: 99.9650,
+        status: 'notyet',
+        why: 'A meditation retreat centre on Koh Phangan led by former monk Anthony Markwell, teaching Buddhist meditation from the Southeast Asian monastic tradition. Mostly Vipassana retreats of 7 to 21 days.',
+        practical: '7–21 day retreats · book online',
+        links: [{ text: 'indriyaretreat.com', url: 'https://indriyaretreat.com/' }]
     }
 ];
 
