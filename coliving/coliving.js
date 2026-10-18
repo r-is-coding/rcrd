@@ -255,7 +255,7 @@
         groups.forEach(($group, id) => { $group.hidden = filter.sort === 'price' || !visibleCount.get(id); });
         $priceGroup.hidden = filter.sort !== 'price' || !points.length;
         $list.classList.toggle('by-price', filter.sort === 'price');
-        $sortRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x.dataset.sort === filter.sort));
+        $sort.textContent = filter.sort === 'price' ? 'sort by vibe ↕' : 'sort by price ↕';
 
         $catRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x.dataset.category === filter.category));
         $been.classList.toggle('is-active', filter.beenOnly);
@@ -314,33 +314,29 @@
     $reset.hidden = true;
     $reset.addEventListener('click', () => setFilter({ category: 'all', beenOnly: false }));
 
+    // Category chips: click to filter, click again to show all
     const $catRow = el('div', 'filter-row');
-    const $all = chip('all', null, () => setFilter({ category: 'all' }));
-    $all.dataset.category = 'all';
-    $catRow.appendChild($all);
     colivingCategories.forEach(c => {
-        // Clicking the active category again goes back to all
         const $c = chip(c.short || c.name, c.color, () => setFilter({ category: filter.category === c.id ? 'all' : c.id }));
         $c.dataset.category = c.id;
         $catRow.appendChild($c);
     });
 
-    const $statusRow = el('div', 'filter-row');
-    const $been = chip('only where I\'ve been', null, () => setFilter({ beenOnly: !filter.beenOnly }));
-    $statusRow.appendChild($been);
-    const $legend = el('span', 'legend');
-    $legend.innerHTML = '<span class="dot dot-been"></span>been <span class="dot dot-notyet"></span>not yet';
-    $statusRow.appendChild($legend);
+    // One quiet line: the legend doubles as the "been" filter, plus a sort toggle
+    const $metaRow = el('div', 'meta-row');
+    const $been = el('button', 'text-toggle');
+    $been.type = 'button';
+    $been.title = "show only places I've been";
+    $been.innerHTML = '<span class="dot dot-been"></span>been';
+    $been.addEventListener('click', () => setFilter({ beenOnly: !filter.beenOnly }));
+    const $notYet = el('span', 'legend-item');
+    $notYet.innerHTML = '<span class="dot dot-notyet"></span>not yet';
+    const $sort = el('button', 'text-toggle sort-toggle');
+    $sort.type = 'button';
+    $sort.addEventListener('click', () => setFilter({ sort: filter.sort === 'price' ? 'vibe' : 'price' }));
+    $metaRow.append($been, $notYet, $sort);
 
-    const $sortRow = el('div', 'filter-row');
-    $sortRow.appendChild(el('span', 'sort-label', 'sort'));
-    [['vibe', 'by vibe'], ['price', 'by price']].forEach(([id, label]) => {
-        const $c = chip(label, null, () => setFilter({ sort: id }));
-        $c.dataset.sort = id;
-        $sortRow.appendChild($c);
-    });
-
-    $filters.append($catRow, $statusRow, $sortRow, $reset);
+    $filters.append($catRow, $metaRow, $reset);
 
     // Moves each card into its category group, or into one list sorted
     // by price. Places with no known price go last.

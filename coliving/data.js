@@ -20,13 +20,6 @@ const colivingCategories = [
         description: 'A blend of hippie and rationalist culture, close to the TPOT scene. The Garden and the places with ties to it.'
     },
     {
-        id: 'between',
-        name: 'Between the Garden and EA',
-        short: 'in between',
-        color: '#ffd89b',
-        description: 'Where the Garden-esque and EA worlds overlap: impact-minded, with more room for wisdom, culture and inner work. Close to integral altruism (int/a).'
-    },
-    {
         id: 'ea',
         name: 'EA / rationalist / AI safety',
         short: 'EA',
@@ -53,13 +46,6 @@ const colivingCategories = [
         short: 'coworking',
         color: '#a8d4ff',
         description: 'Best when work is the main focus: fewer workshops and ceremonies, more desk time. These sit outside the social circles of the Garden-esque places.'
-    },
-    {
-        id: 'own',
-        name: 'A vibe of their own',
-        short: 'own vibe',
-        color: '#c9e88f',
-        description: "Places that don't fit the other groups."
     }
 ];
 
@@ -175,17 +161,16 @@ const colivingSpaces = [
         links: [{ text: 'traditionaldreamfactory.com', url: 'https://www.traditionaldreamfactory.com/' }]
     },
 
-    // ── Between the Garden and EA ──────────────────────────────
     {
         id: 'life-itself',
         name: 'Life Itself',
         place: 'Bergerac, Dordogne, France',
-        category: 'between',
+        category: 'garden',
         lat: 44.8510,
         lng: 0.4820,
         status: 'notyet',
         priceFrom: 350,
-        why: 'A residential hub in a riverside manor in Bergerac. A lovely house, though reportedly not the most smoothly organised.',
+        why: 'A residential hub in a riverside manor in Bergerac, where Garden-esque culture overlaps with EA: impact-minded, with room for wisdom and inner work. A lovely house, though reportedly not the most smoothly organised.',
         practical: '€350–850/month plus food · 1 week to 3 months · apply',
         links: [{ text: 'lifeitself.org', url: 'https://lifeitself.org/residencies' }]
     },
@@ -317,12 +302,12 @@ const colivingSpaces = [
         links: [{ text: 'picassacoliving.com', url: 'https://picassacoliving.com/' }]
     },
 
-    // ── A vibe of their own ────────────────────────────────────
+    // ── further afield (garden-esque) ───────────────────────────
     {
         id: 'pachamama',
         name: 'PachaMama',
         place: 'San Juanillo, Guanacaste, Costa Rica',
-        category: 'own',
+        category: 'garden',
         lat: 10.0300,
         lng: -85.7000,
         status: 'notyet',
@@ -334,7 +319,7 @@ const colivingSpaces = [
         id: 'vitalia',
         name: 'Vitalia',
         place: 'Roatán, Honduras',
-        category: 'own',
+        category: 'garden',
         lat: 16.3700,
         lng: -86.4400,
         status: 'notyet',

@@ -69,7 +69,7 @@ body {
 }
 
 /* Filters */
-.filters { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+.filters { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 2rem; }
 .filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
 
 .chip {
@@ -439,3 +439,31 @@ body {
 }
 .more-list a:hover { border-bottom-color: var(--text); }
 .more-list span { display: block; color: var(--text-faint); font-size: 0.98rem; }
+
+/* ── Compact controls ───────────────────────────────────────── */
+
+.meta-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    --c: var(--text-dim);
+}
+.legend-item, .text-toggle { display: inline-flex; align-items: center; gap: 0.4rem; }
+.text-toggle {
+    padding: 0.15rem 0;
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--text-dim);
+    background: none;
+    border: none;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s;
+}
+.text-toggle:hover { color: var(--text); border-bottom-color: var(--text); }
+.text-toggle.is-active { color: var(--text); border-bottom: 1px solid var(--text); --c: var(--text); }
+.sort-toggle { margin-left: auto; }
