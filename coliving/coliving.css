@@ -69,7 +69,8 @@ body {
 }
 
 /* Filters */
-.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+.filters { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
 
 .chip {
     display: inline-flex;
@@ -77,8 +78,8 @@ body {
     gap: 0.4rem;
     padding: 0.35rem 0.8rem;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
     color: var(--text-dim);
     background: transparent;
     border: 1px solid var(--line);
@@ -87,11 +88,38 @@ body {
     transition: color 0.3s, border-color 0.3s, background 0.3s;
 }
 .chip:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.2); }
-.chip.is-active { color: var(--text); border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.05); }
+.chip.is-active { color: var(--text); border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.06); }
 
-.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-.dot-been { background: var(--been); box-shadow: 0 0 8px var(--been); }
-.dot-considering { background: var(--considering); box-shadow: 0 0 8px var(--considering); }
+.legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-faint);
+    --c: var(--text-dim);
+}
+.legend .dot-notyet { margin-left: 0.5rem; }
+
+/* Dots: filled = been, hollow ring = not yet */
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+.dot-been { background: var(--c); box-shadow: 0 0 8px var(--c); }
+.dot-notyet { border: 1.5px solid var(--c); }
+
+/* Category groups */
+.groups { list-style: none; display: flex; flex-direction: column; gap: 2.25rem; }
+.group[hidden] { display: none; }
+.group-title {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--c);
+}
+.group-desc { margin: 0.4rem 0 0.9rem; color: var(--text-faint); font-size: 0.98rem; font-style: italic; }
+.group-desc p + p { margin-top: 0.4rem; }
 
 /* Place cards */
 .places { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -135,7 +163,7 @@ body {
 .place-verdict {
     grid-column: 2;
     font-style: italic;
-    color: var(--been);
+    color: var(--c);
     font-size: 1rem;
 }
 
@@ -170,11 +198,12 @@ body {
 .links a {
     font-family: var(--font-mono);
     font-size: 0.7rem;
-    color: var(--considering);
+    color: var(--text-dim);
     text-decoration: none;
-    border-bottom: 1px solid rgba(168, 212, 255, 0.3);
+    border-bottom: 1px solid var(--line);
+    transition: color 0.3s, border-color 0.3s;
 }
-.links a:hover { border-bottom-color: var(--considering); }
+.links a:hover { color: var(--text); border-bottom-color: var(--c); }
 
 .empty { color: var(--text-faint); font-style: italic; }
 
@@ -214,10 +243,14 @@ body {
     opacity: 0;
     animation: pulse 3s ease-out infinite;
 }
+.marker-notyet span {
+    background: var(--void);
+    border: 2px solid var(--c);
+    box-shadow: 0 0 8px var(--c);
+}
+.marker-notyet::after { animation: none; }
 .marker.is-active span { transform: scale(1.5); }
-.marker.is-active::after { opacity: 1; }
-.marker-been { --c: var(--been); }
-.marker-considering { --c: var(--considering); }
+.marker.is-active::after { opacity: 1; animation: pulse 3s ease-out infinite; }
 
 @keyframes pulse {
     0%   { transform: scale(0.6); opacity: 0.8; }
@@ -258,3 +291,12 @@ body {
 .panel { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.12) transparent; }
 .panel::-webkit-scrollbar { width: 6px; }
 .panel::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 3px; }
+
+.place-practical {
+    margin-top: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    line-height: 1.6;
+    letter-spacing: 0.03em;
+    color: var(--text-faint);
+}
