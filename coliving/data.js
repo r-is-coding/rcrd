@@ -14,8 +14,8 @@
 const colivingCategories = [
     {
         id: 'garden',
-        name: 'The Garden & its cousins',
-        short: 'garden-esque',
+        name: 'Hippie-rationalist',
+        short: 'hippie-rationalist',
         color: '#ffb08a',
         description: 'A blend of hippie and rationalist culture, close to the TPOT scene. The Garden and the places with ties to it.'
     },
@@ -45,7 +45,7 @@ const colivingCategories = [
         name: '(Mostly) just coworking',
         short: 'coworking',
         color: '#a8d4ff',
-        description: 'Best when work is the main focus: fewer workshops and ceremonies, more desk time. These sit outside the social circles of the Garden-esque places.'
+        description: 'Best when work is the main focus: fewer workshops and ceremonies, more desk time. These sit outside the social circles of the hippie-rationalist places.'
     },
     {
         id: 'meditation',
@@ -77,7 +77,7 @@ const colivingCategories = [
  * town-level, since few places publish an exact address.
  */
 const colivingSpaces = [
-    // ── The Garden & its cousins ───────────────────────────────
+    // ── Hippie-rationalist ─────────────────────────────────────
     {
         id: 'the-garden',
         name: 'The Garden',
@@ -177,7 +177,7 @@ const colivingSpaces = [
         lng: 0.4820,
         status: 'notyet',
         priceFrom: 350,
-        why: 'A residential hub in a riverside manor in Bergerac, where Garden-esque culture overlaps with EA: impact-minded, with room for wisdom and inner work. A lovely house, though reportedly not the most smoothly organised.',
+        why: 'A residential hub in a riverside manor in Bergerac, where hippie-rationalist culture overlaps with EA: impact-minded, with room for wisdom and inner work. A lovely house, though reportedly not the most smoothly organised.',
         practical: '€350–850/month plus food · 1 week to 3 months · apply',
         links: [{ text: 'lifeitself.org', url: 'https://lifeitself.org/residencies' }]
     },
@@ -309,7 +309,7 @@ const colivingSpaces = [
         links: [{ text: 'picassacoliving.com', url: 'https://picassacoliving.com/' }]
     },
 
-    // ── further afield (garden-esque) ───────────────────────────
+    // ── further afield (hippie-rationalist) ─────────────────────
     {
         id: 'pachamama',
         name: 'PachaMama',
