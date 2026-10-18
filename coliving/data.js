@@ -120,6 +120,19 @@ const colivingSpaces = [
         links: [{ text: 'coliven.com', url: 'https://coliven.com/communities/udyana-sanctuary' }]
     },
     {
+        id: 'karapanou',
+        name: 'Oikia Karapanou',
+        place: 'Perivola, Aegina, Greece',
+        category: 'garden',
+        lat: 37.7250,
+        lng: 23.4650,
+        status: 'been',
+        when: 'for a Plum Village retreat',
+        why: 'A retreat house on the island of Aegina with a year-round programme of workshops, retreats and residencies: movement, dance, yoga, voice, creative writing, Way of Council gatherings and Plum Village mindfulness retreats led by monastics.',
+        practical: 'events from a weekend to two weeks, roughly late January to mid-November · book per event',
+        links: [{ text: 'karapanou.com', url: 'https://www.karapanou.com/programme/' }]
+    },
+    {
         id: 'owls-nest',
         name: 'Owl\'s Nest',
         place: 'northern Portugal',
