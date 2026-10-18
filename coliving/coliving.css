@@ -1,0 +1,260 @@
+/* ═══════════════════════════════════════════════════════════════
+   RCRD — Co-living map
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    --void: #030108;
+    --void-lighter: #0a0614;
+    --text: #e8e4f0;
+    --text-dim: rgba(232, 228, 240, 0.6);
+    --text-faint: rgba(232, 228, 240, 0.35);
+    --line: rgba(255, 255, 255, 0.08);
+    --been: #ffd89b;
+    --considering: #a8d4ff;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-mono: 'Space Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+    background: var(--void);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 420px) 1fr;
+    height: 100vh;
+    height: 100dvh;
+}
+
+/* ── Side panel ─────────────────────────────────────────────── */
+
+.panel {
+    overflow-y: auto;
+    padding: 2rem 1.75rem 3rem;
+    background: linear-gradient(160deg, rgba(20, 15, 35, 0.98), rgba(5, 3, 12, 1));
+    border-right: 1px solid var(--line);
+}
+
+.back {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.back:hover { color: var(--text); }
+
+.intro { margin: 2rem 0 1.5rem; }
+
+.intro h1 {
+    font-weight: 300;
+    font-size: 2.2rem;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+}
+
+.intro p {
+    margin-top: 0.75rem;
+    color: var(--text-dim);
+    font-size: 1.05rem;
+}
+
+/* Filters */
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+.chip:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.2); }
+.chip.is-active { color: var(--text); border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.05); }
+
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.dot-been { background: var(--been); box-shadow: 0 0 8px var(--been); }
+.dot-considering { background: var(--considering); box-shadow: 0 0 8px var(--considering); }
+
+/* Place cards */
+.places { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+.place {
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.015);
+    transition: border-color 0.3s, background 0.3s;
+}
+.place:hover { border-color: rgba(255, 255, 255, 0.16); }
+.place.is-open { border-color: rgba(255, 255, 255, 0.22); background: rgba(255, 255, 255, 0.04); }
+.place[hidden] { display: none; }
+
+.place-head {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    align-items: baseline;
+    padding: 1rem 1.1rem;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.place-head .dot { align-self: center; }
+
+.place-name { font-size: 1.3rem; font-weight: 400; line-height: 1.2; }
+
+.place-meta {
+    grid-column: 2;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+}
+
+.place-verdict {
+    grid-column: 2;
+    font-style: italic;
+    color: var(--been);
+    font-size: 1rem;
+}
+
+.place-body { display: none; padding: 0 1.1rem 1.2rem 2.4rem; }
+.place.is-open .place-body { display: block; }
+
+.place-why p { color: var(--text-dim); margin-bottom: 0.75rem; }
+
+.place-list-title {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+}
+.place-list { list-style: none; margin-top: 0.25rem; color: var(--text-dim); }
+.place-list li::before { content: '· '; color: var(--text-faint); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.9rem; }
+.tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text-faint);
+}
+
+.links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.9rem; }
+.links a {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--considering);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(168, 212, 255, 0.3);
+}
+.links a:hover { border-bottom-color: var(--considering); }
+
+.empty { color: var(--text-faint); font-style: italic; }
+
+/* ── Map ────────────────────────────────────────────────────── */
+
+.map { height: 100%; background: radial-gradient(ellipse at center, #0a0614 0%, var(--void) 70%); }
+
+.leaflet-container { background: transparent; font-family: var(--font-mono); }
+.leaflet-control-attribution {
+    background: rgba(3, 1, 8, 0.7) !important;
+    color: var(--text-faint) !important;
+    font-size: 0.6rem;
+}
+.leaflet-control-attribution a { color: var(--text-dim) !important; }
+.leaflet-bar a {
+    background: rgba(20, 15, 35, 0.9) !important;
+    color: var(--text) !important;
+    border-color: var(--line) !important;
+}
+
+/* Glowing markers */
+.marker { position: relative; width: 18px; height: 18px; }
+.marker span {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: var(--c);
+    box-shadow: 0 0 10px var(--c), 0 0 22px var(--c);
+    transition: transform 0.3s;
+}
+.marker::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--c);
+    opacity: 0;
+    animation: pulse 3s ease-out infinite;
+}
+.marker.is-active span { transform: scale(1.5); }
+.marker.is-active::after { opacity: 1; }
+.marker-been { --c: var(--been); }
+.marker-considering { --c: var(--considering); }
+
+@keyframes pulse {
+    0%   { transform: scale(0.6); opacity: 0.8; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
+
+.leaflet-tooltip.place-tooltip {
+    background: rgba(10, 8, 20, 0.92);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    padding: 0.2rem 0.6rem;
+    box-shadow: none;
+}
+.leaflet-tooltip.place-tooltip::before { display: none; }
+
+/* ── Mobile: map on top, list below ─────────────────────────── */
+
+@media (max-width: 760px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: 45vh auto;
+        height: auto;
+    }
+    .map { order: -1; height: 45vh; position: sticky; top: 0; z-index: 1; }
+    .panel { overflow: visible; border-right: none; border-top: 1px solid var(--line); padding: 1.5rem 16px 3rem; min-height: 55vh; }
+    .intro { margin: 1.25rem 0 1.25rem; }
+    .intro h1 { font-size: 1.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marker::after { animation: none; }
+}
+
+/* Quiet scrollbar */
+.panel { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.12) transparent; }
+.panel::-webkit-scrollbar { width: 6px; }
+.panel::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 3px; }

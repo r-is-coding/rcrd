@@ -491,7 +491,9 @@ const stars = [
         labelPosition: 'bottom',
         description: 'Oct–Nov: Spain / Portugal\nDec–Jan: Thailand (meditating)\nJan onward: ???\nMay–Aug: probably The Garden, Portugal',
         image: null,
-        links: []
+        links: [
+            { text: 'co-living spaces I recommend →', url: 'coliving/' }
+        ]
     },
     {
         id: 'bucket-list',

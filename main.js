@@ -257,8 +257,10 @@
                 const $a = document.createElement('a');
                 $a.href = link.url;
                 $a.textContent = link.text;
-                $a.target = '_blank';
-                $a.rel = 'noopener noreferrer';
+                if (/^https?:/.test(link.url)) {
+                    $a.target = '_blank';
+                    $a.rel = 'noopener noreferrer';
+                }
                 $links.appendChild($a);
             });
         }
@@ -684,8 +686,10 @@
                 const $a = document.createElement('a');
                 $a.href = link.url;
                 $a.textContent = link.text;
-                $a.target = '_blank';
-                $a.rel = 'noopener noreferrer';
+                if (/^https?:/.test(link.url)) {
+                    $a.target = '_blank';
+                    $a.rel = 'noopener noreferrer';
+                }
                 $links.appendChild($a);
             });
         }

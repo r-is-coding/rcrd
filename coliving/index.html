@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>co-living</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <link rel="stylesheet" href="coliving.css">
+</head>
+<body>
+    <main class="layout">
+        <aside class="panel">
+            <a class="back" href="../">← back to the universe</a>
+
+            <header class="intro">
+                <h1>places to live, together</h1>
+                <p>Co-living spaces I've stayed at or am curious about. If you're asking <em>"where should I go?"</em>, this is my answer, and why.</p>
+            </header>
+
+            <div class="filters" role="group" aria-label="Filter places">
+                <button class="chip is-active" data-filter="all">all</button>
+                <button class="chip" data-filter="been"><span class="dot dot-been"></span>been</button>
+                <button class="chip" data-filter="considering"><span class="dot dot-considering"></span>considering</button>
+            </div>
+
+            <ol class="places" id="places"></ol>
+        </aside>
+
+        <div class="map" id="map" aria-label="World map of co-living spaces"></div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="data.js"></script>
+    <script src="coliving.js"></script>
+</body>
+</html>
