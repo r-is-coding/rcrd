@@ -319,7 +319,7 @@ const colivingSpaces = [
         id: 'vitalia',
         name: 'Vitalia',
         place: 'Roatán, Honduras',
-        category: 'garden',
+        category: 'hacker',
         lat: 16.3700,
         lng: -86.4400,
         status: 'notyet',
