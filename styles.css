@@ -514,6 +514,78 @@ body.curiosity-mode .star.curiosity-star.no-info .star-label {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Kinds of stars — projects, attended, topics
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Projects: a permanent ring and brighter label */
+.star.kind-project .star-core.clickable {
+    outline: 1px solid color-mix(in srgb, var(--star-color) 55%, transparent);
+    outline-offset: 4px;
+}
+.star.kind-project .star-core.clickable + .star-label {
+    opacity: 0.95;
+    color: var(--text);
+}
+
+/* Topics: quieter glow and label */
+.star.kind-topic .star-core.clickable {
+    box-shadow: 0 0 6px var(--star-color, var(--star-white));
+}
+.star.kind-topic .star-core.clickable + .star-label {
+    opacity: 0.5;
+}
+.star.kind-topic .star-core.clickable:hover + .star-label {
+    opacity: 1;
+}
+
+/* Focusing on one kind dims the rest */
+body[data-focus="project"] .star.regular-star:not(.kind-project),
+body[data-focus="attended"] .star.regular-star:not(.kind-attended),
+body[data-focus="topic"] .star.regular-star:not(.kind-topic) {
+    opacity: 0.12;
+}
+body[data-focus="project"] .gas-cloud,
+body[data-focus="attended"] .gas-cloud,
+body[data-focus="topic"] .gas-cloud {
+    opacity: 0.45;
+}
+
+/* The key, under the nav link */
+.star-key {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.1rem;
+}
+
+.star-key button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.15rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    background: none;
+    border: none;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+.star-key button:hover { color: var(--text); border-bottom-color: var(--text); }
+.star-key button[aria-pressed="true"] { color: var(--text); border-bottom: 1px solid var(--text); }
+
+.key-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--text);
+    box-shadow: 0 0 6px var(--text);
+}
+.key-project { outline: 1px solid var(--text-dim); outline-offset: 2px; }
+.key-topic { width: 5px; height: 5px; opacity: 0.6; box-shadow: none; }
+
+/* ═══════════════════════════════════════════════════════════════
    Earth — Where I'll Be (a planet, not a star)
    ═══════════════════════════════════════════════════════════════ */
 
@@ -1123,7 +1195,11 @@ body.curiosity-mode #curiosity-toggle .toggle-icon {
 }
 
 .falling-text.translated {
-    color: rgba(200, 215, 240, 0.85);
+    font-style: normal;
+    font-size: 1.25rem;
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+    color: var(--text);
 }
 
 .falling-translate-btn {

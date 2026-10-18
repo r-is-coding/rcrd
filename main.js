@@ -604,7 +604,7 @@
 
     function createStarElement(star, className, allowClickable = true) {
         const $star = document.createElement('div');
-        $star.className = `star ${className}` + (star.variant === 'planet' ? ' star-planet' : '');
+        $star.className = `star ${className}` + (star.variant === 'planet' ? ' star-planet' : '') + (star.kind ? ` kind-${star.kind}` : '');
         $star.dataset.starId = star.id;
         
         const x = (star.x / 100) * config.universeWidth;
@@ -670,7 +670,10 @@
         const $links = $starModal.querySelector('.modal-links');
         
         $title.textContent = star.name;
-        $type.textContent = star.type;
+        // Projects show my role; attended places say so
+        $type.textContent = star.kind === 'project' && star.role ? `project · ${star.role}`
+            : star.kind === 'attended' ? `attended · ${star.type}`
+            : star.type;
         $starModal.style.setProperty('--accent', star.color || '#e8d5f5');
         $description.textContent = star.description || '';
         
@@ -1349,6 +1352,16 @@
         
         // Falling star modal close on backdrop click
         $fallingModal.querySelector('.modal-backdrop').addEventListener('click', closeFallingStarModal);
+
+        // Star key: click a kind to highlight it, click again to show all
+        document.querySelectorAll('.star-key button').forEach($btn => {
+            $btn.addEventListener('click', () => {
+                const kind = document.body.dataset.focus === $btn.dataset.kind ? '' : $btn.dataset.kind;
+                document.body.dataset.focus = kind;
+                document.querySelectorAll('.star-key button').forEach(b =>
+                    b.setAttribute('aria-pressed', String(b.dataset.kind === kind)));
+            });
+        });
 
         // Black hole portal exit
         document.getElementById('portal-exit').addEventListener('click', exitBlackHole);
