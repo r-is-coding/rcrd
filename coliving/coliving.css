@@ -317,3 +317,125 @@ body {
 }
 .reset:hover { border-bottom-color: var(--text); }
 .reset[hidden] { display: none; }
+
+/* ── Sorting ────────────────────────────────────────────────── */
+
+.sort-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    margin-right: 0.2rem;
+}
+.place-price { display: none; color: var(--text-dim); }
+.by-price .place-price { display: block; }
+.group-price { --c: var(--text); }
+.place-suggested { font-style: normal; }
+
+/* ── Propose a place ────────────────────────────────────────── */
+
+[hidden] { display: none !important; }
+
+.propose-btn {
+    display: block;
+    width: 100%;
+    margin: -0.25rem 0 1.5rem;
+    padding: 0.7rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(255, 255, 255, 0.22);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+}
+.propose-btn:hover { border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.06); }
+
+.back-btn { background: none; border: none; cursor: pointer; padding: 0; }
+
+.propose-form fieldset { border: none; margin-bottom: 1.75rem; }
+.propose-form legend {
+    margin-bottom: 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--been);
+}
+
+.field { display: block; margin-bottom: 1rem; }
+.field-label { display: block; margin-bottom: 0.35rem; color: var(--text-dim); font-size: 1rem; line-height: 1.35; }
+.field-label em { color: var(--been); font-style: normal; }
+
+.propose-form input[type="text"],
+.propose-form input[type="url"],
+.propose-form input[type="email"],
+.propose-form textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.3s, background 0.3s;
+}
+.propose-form input::placeholder, .propose-form textarea::placeholder { color: var(--text-faint); }
+.propose-form input:focus, .propose-form textarea:focus { border-color: rgba(255, 216, 155, 0.5); background: rgba(255, 255, 255, 0.05); }
+
+.choices { display: flex; flex-direction: column; gap: 0.35rem; color: var(--text-dim); }
+.choices label { display: flex; align-items: center; gap: 0.55rem; cursor: pointer; }
+.choices input { accent-color: var(--been); }
+
+.pin-hint { margin-top: 0.4rem; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-faint); }
+.pin-hint.is-set { color: var(--been); }
+
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+.form-status { min-height: 1.4em; margin-bottom: 0.6rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); }
+.form-status.is-error { color: #ff9a9a; }
+
+.submit-btn {
+    padding: 0.7rem 1.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--void);
+    background: var(--been);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 216, 155, 0.25);
+    transition: box-shadow 0.3s, opacity 0.3s;
+}
+.submit-btn:hover { box-shadow: 0 0 30px rgba(255, 216, 155, 0.45); }
+.submit-btn:disabled { opacity: 0.5; cursor: wait; }
+
+.propose-done h2 { font-weight: 300; font-size: 1.8rem; margin-bottom: 0.5rem; }
+.propose-done p { color: var(--text-dim); margin-bottom: 1.25rem; }
+
+/* Map while picking a location */
+.map.is-picking .leaflet-container,
+.map.is-picking { cursor: crosshair; }
+.marker-pin { --c: #ffffff; }
+.marker-pin span { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25), 0 0 18px #fff; }
+
+/* ── Lists of lists ─────────────────────────────────────────── */
+
+.more { --c: var(--text-dim); margin-top: 3rem; padding-top: 1.75rem; border-top: 1px solid var(--line); }
+.more-list { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+.more-list a {
+    display: inline-block;
+    font-size: 1.15rem;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.3s;
+}
+.more-list a:hover { border-bottom-color: var(--text); }
+.more-list span { display: block; color: var(--text-faint); font-size: 0.98rem; }

@@ -7,29 +7,95 @@
     const STATUS_LABEL = { been: 'been', notyet: 'not been yet' };
     const categories = new Map(colivingCategories.map(c => [c.id, c]));
 
+    // Equal Earth projection: shows countries at their true relative size,
+    // unlike the usual Web Mercator, which inflates Europe and the north.
+    const EE_X = 17243959.06, EE_Y = 8392927.6; // projected extent in metres
+    const crs = new L.Proj.CRS('EPSG:8857', '+proj=eqearth +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', {
+        origin: [-EE_X, EE_Y],
+        bounds: L.bounds([-EE_X, -EE_Y], [EE_X, EE_Y]),
+        resolutions: Array.from({ length: 12 }, (_, z) => (2 * EE_X / 256) / Math.pow(2, z))
+    });
+
     const map = L.map('map', {
-        preferCanvas: true,
+        crs,
         zoomControl: true,
-        minZoom: 2,
-        maxZoom: 8,
-        maxBounds: [[-75, -200], [85, 200]],
+        zoomSnap: 0.25,
+        minZoom: 1.5,
+        maxZoom: 9,
+        maxBounds: [[-89, -180], [89, 180]],
         maxBoundsViscosity: 0.8
     }).setView([30, 10], 2);
+    window.colivingMap = map; // used by propose.js
+
+    // Background layers, each in its own pane so they stack correctly
+    [['ocean', 200], ['land', 250], ['grid', 300]].forEach(([name, z]) => {
+        map.createPane(name).style.zIndex = z;
+        map.getPane(name).style.pointerEvents = 'none';
+    });
+    const renderer = (pane) => L.canvas({ pane, padding: 0.5 });
+
+    // Meridians curve in Equal Earth, so lines need many points
+    const meridian = (lng) => Array.from({ length: 37 }, (_, i) => [-90 + i * 5, lng]);
+
+    // The globe's outline, filled as the ocean
+    L.polygon([...meridian(-180), ...meridian(180).reverse()], {
+        renderer: renderer('ocean'), interactive: false,
+        stroke: true, color: 'rgba(168, 212, 255, 0.18)', weight: 1,
+        fillColor: '#0b0820', fillOpacity: 1
+    }).addTo(map);
 
     // Faint graticule, like a star chart
-    const gridStyle = { color: '#ffffff', opacity: 0.05, weight: 1, interactive: false };
+    const gridStyle = { renderer: renderer('grid'), color: '#ffffff', opacity: 0.05, weight: 1, interactive: false };
     for (let lat = -60; lat <= 60; lat += 30) L.polyline([[lat, -180], [lat, 180]], gridStyle).addTo(map);
-    for (let lng = -180; lng <= 180; lng += 30) L.polyline([[-75, lng], [85, lng]], gridStyle).addTo(map);
+    for (let lng = -150; lng <= 150; lng += 30) L.polyline(meridian(lng), gridStyle).addTo(map);
+
+    // Some outlines (Russia, Fiji) cross the 180° line. Leaflet would draw
+    // that as a line straight across the world, so split rings where they cross.
+    function splitAtAntimeridian(ring) {
+        const pieces = [[ring[0]]];
+        for (let i = 1; i < ring.length; i++) {
+            const [lng1, lat1] = ring[i - 1], [lng2, lat2] = ring[i];
+            if (Math.abs(lng2 - lng1) > 180 && Math.abs(lat1) < 80) {
+                const side = Math.sign(lng1);
+                const span = lng2 + 360 * side - lng1;
+                const t = span === 0 ? 0 : (180 * side - lng1) / span; // 0 when a point sits on the line
+                const lat = lat1 + t * (lat2 - lat1);
+                pieces[pieces.length - 1].push([180 * side, lat]);
+                pieces.push([[-180 * side, lat]]);
+            }
+            pieces[pieces.length - 1].push(ring[i]);
+        }
+        if (pieces.length > 1) pieces[0] = pieces.pop().concat(pieces[0]); // ring wraps around
+        return pieces;
+    }
+
+    function fixAntimeridian(geojson) {
+        geojson.features.forEach(f => {
+            const g = f.geometry;
+            if (!g) return;
+            const polys = g.type === 'Polygon' ? [g.coordinates] : g.coordinates;
+            const out = [];
+            polys.forEach(rings => {
+                const [outer, ...holes] = rings;
+                const parts = splitAtAntimeridian(outer);
+                if (parts.length === 1) out.push(rings);
+                else parts.forEach(p => out.push([p])); // holes never cross the line here
+            });
+            f.geometry = { type: 'MultiPolygon', coordinates: out };
+        });
+        return geojson;
+    }
 
     // Country outlines from Natural Earth (no API key needed)
-    map.attributionControl.setPrefix(false).addAttribution('<a href="https://www.naturalearthdata.com/">Natural Earth</a>');
+    map.attributionControl.setPrefix(false).addAttribution('<a href="https://www.naturalearthdata.com/">Natural Earth</a> · Equal Earth projection');
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
         .then(r => r.json())
         .then(topo => {
-            L.geoJSON(topojson.feature(topo, topo.objects.countries), {
+            L.geoJSON(fixAntimeridian(topojson.feature(topo, topo.objects.countries)), {
+                renderer: renderer('land'),
                 interactive: false,
                 style: { color: 'rgba(168, 212, 255, 0.28)', weight: 0.6, fillColor: '#1a1530', fillOpacity: 1 }
-            }).addTo(map).bringToBack();
+            }).addTo(map);
         })
         .catch(() => { /* map still works, just without outlines */ });
 
@@ -37,7 +103,7 @@
     const $filters = document.getElementById('filters');
     const entries = new Map(); // id → { space, marker, $item }
     const groups = new Map();  // category id → $group
-    const filter = { category: 'all', beenOnly: false };
+    const filter = { category: 'all', beenOnly: false, sort: 'vibe' };
     let activeId = null;
 
     function el(tag, className, text) {
@@ -80,6 +146,10 @@
         const meta = [space.place, STATUS_LABEL[space.status], space.when].filter(Boolean).join(' · ');
         $head.appendChild(el('span', 'place-meta', meta));
         if (space.verdict) $head.appendChild(el('span', 'place-verdict', space.verdict));
+        if (space.suggestedBy) $head.appendChild(el('span', 'place-meta place-suggested', `suggested by ${space.suggestedBy}`));
+        // Shown only when sorting by price
+        const price = space.priceFrom == null ? 'price unknown' : space.priceFrom === 0 ? 'free / donation' : `from ~€${space.priceFrom.toLocaleString('en')}/month`;
+        $head.appendChild(el('span', 'place-meta place-price', price));
         $item.appendChild($head);
 
         const $body = el('div', 'place-body');
@@ -171,7 +241,11 @@
                 if (activeId === s.id) { setActive(entry, false); activeId = null; }
             }
         });
-        groups.forEach(($group, id) => { $group.hidden = !visibleCount.get(id); });
+        arrange();
+        groups.forEach(($group, id) => { $group.hidden = filter.sort === 'price' || !visibleCount.get(id); });
+        $priceGroup.hidden = filter.sort !== 'price' || !points.length;
+        $list.classList.toggle('by-price', filter.sort === 'price');
+        $sortRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x.dataset.sort === filter.sort));
 
         $catRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x.dataset.category === filter.category));
         $been.classList.toggle('is-active', filter.beenOnly);
@@ -186,6 +260,7 @@
         const parts = [];
         if (filter.category !== 'all') parts.push(filter.category);
         if (filter.beenOnly) parts.push('been');
+        if (filter.sort === 'price') parts.push('price');
         return parts.length ? '#' + parts.join('+') : '';
     }
 
@@ -193,7 +268,8 @@
         const parts = location.hash.replace(/^#/, '').split('+').filter(Boolean);
         return {
             category: parts.find(p => categories.has(p)) || 'all',
-            beenOnly: parts.includes('been')
+            beenOnly: parts.includes('been'),
+            sort: parts.includes('price') ? 'price' : 'vibe'
         };
     }
 
@@ -246,7 +322,27 @@
     $legend.innerHTML = '<span class="dot dot-been"></span>been <span class="dot dot-notyet"></span>not yet';
     $statusRow.appendChild($legend);
 
-    $filters.append($catRow, $statusRow, $reset);
+    const $sortRow = el('div', 'filter-row');
+    $sortRow.appendChild(el('span', 'sort-label', 'sort'));
+    [['vibe', 'by vibe'], ['price', 'by price']].forEach(([id, label]) => {
+        const $c = chip(label, null, () => setFilter({ sort: id }));
+        $c.dataset.sort = id;
+        $sortRow.appendChild($c);
+    });
+
+    $filters.append($catRow, $statusRow, $sortRow, $reset);
+
+    // Moves each card into its category group, or into one list sorted
+    // by price. Places with no known price go last.
+    function arrange() {
+        if (filter.sort === 'price') {
+            [...entries.values()]
+                .sort((a, b) => (a.space.priceFrom ?? Infinity) - (b.space.priceFrom ?? Infinity))
+                .forEach(e => $priceList.appendChild(e.$item));
+        } else {
+            entries.forEach(e => e.$home.appendChild(e.$item)); // entries keep their original order
+        }
+    }
 
     // ── List, grouped by category; places I've been come first ──
     const statusOrder = { been: 0, notyet: 1 };
@@ -265,12 +361,39 @@
             const $item = buildItem(space);
             const marker = buildMarker(space).addTo(map);
             $ol.appendChild($item);
-            entries.set(space.id, { space, marker, $item });
+            entries.set(space.id, { space, marker, $item, $home: $ol });
         });
         $group.appendChild($ol);
         $list.appendChild($group);
         groups.set(cat.id, $group);
     });
+
+    const $priceGroup = el('li', 'group group-price');
+    $priceGroup.appendChild(el('h2', 'group-title', 'cheapest first'));
+    $priceGroup.appendChild(paragraphs("Rough monthly cost of the cheapest option. What's included (meals, VAT) varies, so open a card for details.", 'group-desc'));
+    const $priceList = el('ol', 'places');
+    $priceGroup.appendChild($priceList);
+    $priceGroup.hidden = true;
+    $list.appendChild($priceGroup);
+
+    // ── Lists of lists ──
+    if (typeof colivingDirectories !== 'undefined' && colivingDirectories.length) {
+        const $more = el('section', 'more');
+        $more.appendChild(el('h2', 'group-title', 'there are many more'));
+        $more.appendChild(paragraphs('These are just a few. Directories with hundreds of other places:', 'group-desc'));
+        const $ul = el('ul', 'more-list');
+        colivingDirectories.forEach(d => {
+            const $li = el('li');
+            const $a = el('a', null, d.name);
+            $a.href = d.url;
+            $a.target = '_blank';
+            $a.rel = 'noopener noreferrer';
+            $li.append($a, el('span', null, d.description));
+            $ul.appendChild($li);
+        });
+        $more.appendChild($ul);
+        document.getElementById('list-view').appendChild($more);
+    }
 
     if (!entries.size) $list.appendChild(el('li', 'empty', 'Nothing here yet.'));
 

@@ -15,24 +15,124 @@
 <body>
     <main class="layout">
         <aside class="panel">
-            <a class="back" href="../">← back to the universe</a>
+            <!-- List view -->
+            <section id="list-view">
+                <a class="back" href="../">← back to the universe</a>
 
-            <header class="intro">
-                <h1>places to live, together</h1>
-                <p>Co-living spaces I've stayed at or am curious about. If you're asking <em>"where should I go?"</em>, the answer is different for everyone, so they're grouped by vibe, with why I'd go.</p>
-            </header>
+                <header class="intro">
+                    <h1>places to live, together</h1>
+                    <p>Co-living spaces I've stayed at or am curious about. If you're asking <em>"where should I go?"</em>, the answer is different for everyone, so they're grouped by vibe, with why I'd go.</p>
+                </header>
 
-            <div class="filters" id="filters" aria-label="Filter places"></div>
+                <button type="button" class="propose-btn" id="propose-open">+ propose a place</button>
 
-            <ol class="groups" id="places"></ol>
+                <div class="filters" id="filters" aria-label="Filter places"></div>
+
+                <ol class="groups" id="places"></ol>
+            </section>
+
+            <!-- Propose view -->
+            <section id="propose-view" hidden>
+                <button type="button" class="back back-btn" id="propose-close">← back to the list</button>
+
+                <header class="intro">
+                    <h1>propose a place</h1>
+                    <p>Know a co-living space that belongs here? Tell me about it. I read every proposal and add the ones that fit, with your name on them.</p>
+                </header>
+
+                <form class="propose-form" id="propose-form" novalidate>
+                    <fieldset>
+                        <legend>the place</legend>
+
+                        <label class="field">
+                            <span class="field-label">name <em>*</em></span>
+                            <input type="text" name="Place name" required maxlength="120" autocomplete="off">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">link</span>
+                            <input type="url" name="Link" placeholder="https://" maxlength="300" autocomplete="off">
+                        </label>
+
+                        <div class="field">
+                            <span class="field-label">location <em>*</em></span>
+                            <input type="text" name="Location" placeholder="town, country" maxlength="160" autocomplete="off" aria-label="location">
+                            <p class="pin-hint" id="pin-hint">◎ you can also click the map to drop a pin</p>
+                            <input type="hidden" name="Map pin">
+                        </div>
+
+                        <div class="field">
+                            <span class="field-label">have you been there? <em>*</em></span>
+                            <div class="choices">
+                                <label><input type="radio" name="Been there?" value="yes, stayed there" required> yes, stayed there</label>
+                                <label><input type="radio" name="Been there?" value="visited briefly / for an event"> briefly, or for an event</label>
+                                <label><input type="radio" name="Been there?" value="no, heard good things"> no, heard good things</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>what it's like</legend>
+
+                        <label class="field">
+                            <span class="field-label">what vibe does it have?</span>
+                            <textarea name="Vibe" rows="3" maxlength="2000"></textarea>
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">which communities is it connected to? what kind of people pass through?</span>
+                            <textarea name="Communities and people" rows="3" maxlength="2000"></textarea>
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">what does it lend itself to? what did you feel like doing most while there?</span>
+                            <textarea name="Activities" rows="3" maxlength="2000"></textarea>
+                        </label>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>about you</legend>
+
+                        <label class="field">
+                            <span class="field-label">who are you? <em>*</em></span>
+                            <input type="text" name="Your name" required maxlength="120" placeholder="name, handle, or both" autocomplete="name">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">which communities do you feel (loosely) part of?</span>
+                            <textarea name="Your communities" rows="2" maxlength="1000"></textarea>
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">email, if you're happy for me to reply</span>
+                            <input type="email" name="email" maxlength="200" autocomplete="email">
+                        </label>
+                    </fieldset>
+
+                    <!-- Spam trap: hidden from people, bots fill it in -->
+                    <input type="text" name="_gotcha" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                    <p class="form-status" id="form-status" role="status"></p>
+                    <button type="submit" class="submit-btn">send proposal</button>
+                </form>
+
+                <div class="propose-done" id="propose-done" hidden>
+                    <h2>thank you ✦</h2>
+                    <p>Your proposal is on its way. If it fits, it'll show up on the map with your name.</p>
+                    <button type="button" class="chip" id="propose-again">propose another</button>
+                </div>
+            </section>
         </aside>
 
         <div class="map" id="map" aria-label="World map of co-living spaces"></div>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.11.0/proj4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
     <script src="data.js"></script>
     <script src="coliving.js"></script>
+    <script src="propose.js"></script>
 </body>
 </html>

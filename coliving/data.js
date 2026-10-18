@@ -17,42 +17,49 @@ const colivingCategories = [
         name: 'The Garden & its cousins',
         short: 'garden-esque',
         color: '#ffb08a',
-        description: 'Hippy + rationalist, TPOT-esque. The Garden and everything that feels connected to it.'
+        description: 'A blend of hippie and rationalist culture, close to the TPOT scene. The Garden and the places with ties to it.'
     },
     {
         id: 'between',
         name: 'Between the Garden and EA',
         short: 'in between',
         color: '#ffd89b',
-        description: 'Where the Garden-esque and EA worlds overlap: EA-minded, with more room for wisdom, culture and inner work. Int/a-adjacent.'
+        description: 'Where the Garden-esque and EA worlds overlap: impact-minded, with more room for wisdom, culture and inner work. Close to integral altruism (int/a).'
     },
     {
         id: 'ea',
         name: 'EA / rationalist / AI safety',
         short: 'EA',
         color: '#b9a7ff',
-        description: 'Cleanly EA, rationalist and AI safety.'
+        description: 'Spaces built around effective altruism, rationality and AI safety.'
     },
     {
         id: 'selforg',
         name: 'Self-organized',
         short: 'self-organized',
         color: '#f48fb1',
-        description: 'Collectively run, cheap and minimal. Expect to pitch in.'
+        description: 'Collectively run, low-cost and minimal. Residents share the work of running the place.'
     },
     {
         id: 'hacker',
         name: 'Hackerish',
         short: 'hacker',
         color: '#7ee0c3',
-        description: 'Tech and AI, in a more experimental key.'
+        description: 'Technology and AI, approached experimentally.'
     },
     {
         id: 'coworking',
         name: '(Mostly) just coworking',
         short: 'coworking',
         color: '#a8d4ff',
-        description: 'Decent picks if work is the focus, with less vibing and hippy stuff. These sit outside the community bonds of the Garden-esque places.'
+        description: 'Best when work is the main focus: fewer workshops and ceremonies, more desk time. These sit outside the social circles of the Garden-esque places.'
+    },
+    {
+        id: 'own',
+        name: 'A vibe of their own',
+        short: 'own vibe',
+        color: '#c9e88f',
+        description: "Places that don't fit the other groups."
     }
 ];
 
@@ -63,10 +70,13 @@ const colivingCategories = [
  * - category: one of the category ids above
  * - lat, lng: coordinates (right-click a spot in Google Maps to copy them)
  * - status: 'been' or 'notyet'
- * - verdict: optional one-liner, e.g. 'would go back in a heartbeat'
+ * - verdict: optional one-liner
  * - when: optional, e.g. 'summer 2025, 3 months'
- * - why: the answer to "would you recommend it, and why?" (\n\n = new paragraph)
+ * - why: what it is and who it suits (\n\n = new paragraph)
  * - practical: optional one line of price / stay / how to get in
+ * - priceFrom: rough € per month for the cheapest option, used for
+ *              'sort by price' (0 = free / donation, leave out if unknown)
+ * - suggestedBy: name of whoever proposed it, if it came from the form
  * - goodFor, notFor, tags: optional lists
  * - links: optional [{ text, url }]
  *
@@ -83,24 +93,13 @@ const colivingSpaces = [
         lat: 41.6905,
         lng: -8.7044,
         status: 'been',
-        verdict: '',
-        when: 'probably back May–Aug',
-        why: 'A magical forest you sometimes get lost in while walking around northern Portugal. Inhabited by fairies and forest elves who give you tea and tell you stories. You will miss them.\n\nRational hippies. Go there to downregulate, touch grass, rest and cuddle.',
-        goodFor: ['resting and downregulating', 'community, cuddles, nature'],
-        notFor: ['intense coworking (though coworking is definitely possible)'],
+        priceFrom: 950,
+        when: 'back again May–Aug',
+        why: 'A forest estate in northern Portugal whose community mixes rationalist and hippie culture. Best for slowing down: rest, nature and a warm, affectionate community.',
+        goodFor: ['recovering from a busy or burnt-out stretch', 'community, nature and connection'],
+        notFor: ['intense, heads-down work (though coworking is possible)'],
         practical: '€220/week sliding scale, 3 meals included · 1 week minimum · apply',
         links: [{ text: 'labs.thegarden.pt', url: 'https://labs.thegarden.pt/' }]
-    },
-    {
-        id: 'owls-nest',
-        name: 'Owl\'s Nest',
-        place: 'northern Portugal',
-        category: 'garden',
-        lat: 41.45,  // placeholder: exact location unknown
-        lng: -8.2,
-        status: 'notyet',
-        why: 'Part of the same northern Portugal scene. No website I know of.',
-        links: []
     },
     {
         id: 'fools-valley',
@@ -110,9 +109,33 @@ const colivingSpaces = [
         lat: 39.0190,
         lng: -9.1510,
         status: 'been',
-        why: 'Similar to The Garden, but smaller.',
+        priceFrom: 300,
+        why: 'A smaller counterpart to The Garden, 30 minutes north of Lisbon, centred on movement, dialogue and meditation.',
         practical: 'rooms €150–525/week, dorms from €70/week, plus a meal fee · 2 weeks recommended · apply with a reference',
         links: [{ text: 'foolsvalley.com', url: 'https://foolsvalley.com/' }]
+    },
+    {
+        id: 'udyana',
+        name: 'Udyāna Sanctuary',
+        place: 'Lago, northern Portugal',
+        category: 'garden',
+        lat: 41.6156,
+        lng: -8.4253,
+        status: 'been',
+        when: 'for an event',
+        why: 'An eco-living sanctuary in northern Portugal, similar in feel to The Garden. Seems geared more towards events than long residencies.',
+        links: [{ text: 'coliven.com', url: 'https://coliven.com/communities/udyana-sanctuary' }]
+    },
+    {
+        id: 'owls-nest',
+        name: 'Owl\'s Nest',
+        place: 'northern Portugal',
+        category: 'garden',
+        lat: 41.45,  // placeholder: exact location unknown
+        lng: -8.2,
+        status: 'notyet',
+        why: 'A place in northern Portugal with some overlap in people with The Garden. No public website.',
+        links: []
     },
     {
         id: 'feytopia',
@@ -122,7 +145,8 @@ const colivingSpaces = [
         lat: 48.0130,
         lng: 3.3310,
         status: 'notyet',
-        why: "Similar to The Garden, probably pricier. Usually opens in December, I think. Haven't been.",
+        priceFrom: 1600,
+        why: 'A community in a 17th-century château in Burgundy, similar in spirit to The Garden but more expensive. The season usually opens in December.',
         practical: '€1,000–3,000/month, food extra · 2 weeks to 4 months · apply',
         links: [{ text: 'feytopia.com', url: 'https://feytopia.com/' }]
     },
@@ -134,7 +158,7 @@ const colivingSpaces = [
         lat: 41.6100,
         lng: 2.5400,
         status: 'notyet',
-        why: "Similar to The Garden, but with even more workshops and events. Slightly more expensive. Run by a married couple, one of them Richard D. Bartlett. Haven't been.",
+        why: 'A restored forest villa near Barcelona, similar to The Garden but with a fuller programme of workshops and events, at a somewhat higher price. Run by a married couple, including Richard D. Bartlett.',
         practical: '1 week to 1 month stays',
         links: [{ text: 'eltilo.casa', url: 'https://www.eltilo.casa/' }]
     },
@@ -146,22 +170,12 @@ const colivingSpaces = [
         lat: 38.0200,
         lng: -8.5800,
         status: 'notyet',
-        why: 'Similar to The Garden, perhaps more ascetic and more farming-oriented. Haven\'t been.',
+        why: 'A regenerative village in the Alentejo, similar to The Garden but more ascetic and more focused on farming.',
         practical: 'book through the site',
         links: [{ text: 'traditionaldreamfactory.com', url: 'https://www.traditionaldreamfactory.com/' }]
     },
-    {
-        id: 'udyana',
-        name: 'Udyāna Sanctuary',
-        place: 'Lago, northern Portugal',
-        category: 'garden',
-        lat: 41.6156,
-        lng: -8.4253,
-        status: 'been',
-        when: 'for an event',
-        why: 'Nice place. Kind of similar to The Garden, but more for events than residencies, I think.',
-        links: [{ text: 'coliven.com', url: 'https://coliven.com/communities/udyana-sanctuary' }]
-    },
+
+    // ── Between the Garden and EA ──────────────────────────────
     {
         id: 'life-itself',
         name: 'Life Itself',
@@ -170,7 +184,8 @@ const colivingSpaces = [
         lat: 44.8510,
         lng: 0.4820,
         status: 'notyet',
-        why: 'Nice house, though I\'ve heard it might not be the best organized.',
+        priceFrom: 350,
+        why: 'A residential hub in a riverside manor in Bergerac. A lovely house, though reportedly not the most smoothly organised.',
         practical: '€350–850/month plus food · 1 week to 3 months · apply',
         links: [{ text: 'lifeitself.org', url: 'https://lifeitself.org/residencies' }]
     },
@@ -184,7 +199,8 @@ const colivingSpaces = [
         lat: 49.8480,
         lng: 15.4928,
         status: 'been',
-        why: 'A great EA / AI safety / rationalist place in Czechia. What makes it is the programme and the facilitation.',
+        priceFrom: 300,
+        why: 'A Renaissance château in Czechia that hosts an autumn season for the EA, AI safety and rationalist communities. Its strengths are a well-designed programme and skilled facilitation.',
         practical: '€10–70/day sliding scale, all-inclusive · autumn season · apply',
         links: [{ text: 'fall.hostacov.com', url: 'https://fall.hostacov.com/' }]
     },
@@ -196,14 +212,15 @@ const colivingSpaces = [
         lat: 53.8100,
         lng: -3.0540,
         status: 'been',
-        verdict: "yes, if you're working on something important",
-        why: 'For people working on important global problems, especially AI safety, who want to live on a €0 budget.',
-        goodFor: ['starting a startup, a charity or another project', 'AI safety work'],
+        priceFrom: 0,
+        verdict: 'highly recommended for the right person',
+        why: 'A former hotel in Blackpool offering free or subsidised housing to people working on pressing global problems, especially AI safety. Ideal for working on a minimal budget.',
+        goodFor: ['founders of a new project, startup or charity', 'AI safety researchers'],
         practical: 'free to £900/month for grantees, £30+/night self-funded · apply',
         links: [{ text: 'ceealar.org', url: 'https://www.ceealar.org/' }]
     },
 
-    // ── Self-organized ────────────────────────────────────────
+    // ── Self-organized ─────────────────────────────────────────
     {
         id: 'massia',
         name: 'MASSIA',
@@ -212,9 +229,10 @@ const colivingSpaces = [
         lat: 57.9986,
         lng: 24.5885,
         status: 'been',
-        why: 'The vibe lends itself nicely to writing, painting and that kind of work.',
-        goodFor: ['writing, painting, creative work'],
-        practical: '€15–20/night, solidarity month on request · 1 hour/day of care work',
+        priceFrom: 420,
+        why: 'A collectively run residency in a former village school in rural Estonia. The quiet, unhurried atmosphere suits writing, painting and other creative work.',
+        goodFor: ['writers, artists and creative projects'],
+        practical: '€15–20/night, solidarity month on request · 1 hour/day of shared work',
         links: [{ text: 'massia.ee', url: 'https://www.massia.ee/' }]
     },
     {
@@ -225,9 +243,10 @@ const colivingSpaces = [
         lat: 51.3660,
         lng: 12.7390,
         status: 'notyet',
-        why: 'Haven\'t been, but heard good things. Low cost, minimal living, basic facilities. Some volunteering needed, but not much.',
+        priceFrom: 0,
+        why: 'A house for sustainable projects near Leipzig. Low-cost and minimal, with basic facilities and a modest amount of shared work. Comes well recommended.',
+        notFor: ['long-term coworking: possibly too frugal'],
         practical: 'donation-based · invitation only',
-        notFor: ['long-term coworking: perhaps too frugal and ascetic'],
         links: [{ text: 'kanthaus.online', url: 'https://kanthaus.online/de' }]
     },
 
@@ -240,7 +259,7 @@ const colivingSpaces = [
         lat: 53.1460,
         lng: -4.1210,
         status: 'been',
-        why: 'A collective based in a converted chapel in Snowdonia, mixing co-living, coworking and retreats. Residencies for artists and technologists, with a focus on AI and tech, creativity and regeneration. They also run "voyages": immersive retreats for teams on a mission.',
+        why: 'A collective in a converted chapel in Snowdonia that combines co-living, coworking and retreats. Hosts residencies for artists and technologists, with a focus on AI, creativity and regeneration, and runs immersive retreats for mission-driven teams.',
         practical: 'book a call to ask about prices and residencies',
         links: [{ text: 'astralship.org', url: 'https://astralship.org/' }]
     },
@@ -254,8 +273,9 @@ const colivingSpaces = [
         lat: 39.6580,
         lng: -0.4250,
         status: 'notyet',
-        why: 'Haven\'t been.',
-        practical: '€1,200–2,100/month · 1 month minimum · alcohol-free',
+        priceFrom: 1200,
+        why: 'A 14-room mountain villa outside Valencia built around remote work, with a coworking space, pool and shared dinners. Alcohol-free.',
+        practical: '€1,200–2,100/month · 1 month minimum',
         links: [{ text: 'savicoliving.com', url: 'https://savicoliving.com/' }]
     },
     {
@@ -266,7 +286,8 @@ const colivingSpaces = [
         lat: 37.6300,
         lng: -8.4600,
         status: 'notyet',
-        why: 'Haven\'t been.',
+        priceFrom: 765,
+        why: 'An off-grid valley sanctuary in the Alentejo offering co-living, self-retreats and residencies.',
         practical: '~€700–1,350 for 28 nights · 2 weeks to 2 months · book online',
         links: [{ text: 'satvana.org', url: 'https://satvana.org/stay/' }]
     },
@@ -278,7 +299,8 @@ const colivingSpaces = [
         lat: 42.3515,
         lng: -8.4664,
         status: 'notyet',
-        why: 'Haven\'t been.',
+        priceFrom: 600,
+        why: 'Rural coliving in a small Galician village, set up for remote workers: fibre internet, shared dinners and a group of 10–15.',
         practical: '€600–1,200/month by season · 15 to 60 days',
         links: [{ text: 'anceu.com', url: 'https://anceu.com/' }]
     },
@@ -290,8 +312,61 @@ const colivingSpaces = [
         lat: 37.3460,
         lng: -2.3600,
         status: 'notyet',
-        why: 'Haven\'t been.',
+        why: 'Coliving in an 18th-century family house in an Andalusian mountain village, with home-cooked meals, workshops and excursions.',
         practical: '2 to 8 weeks',
         links: [{ text: 'picassacoliving.com', url: 'https://picassacoliving.com/' }]
+    },
+
+    // ── A vibe of their own ────────────────────────────────────
+    {
+        id: 'pachamama',
+        name: 'PachaMama',
+        place: 'San Juanillo, Guanacaste, Costa Rica',
+        category: 'own',
+        lat: 10.0300,
+        lng: -85.7000,
+        status: 'notyet',
+        why: 'A spiritual eco-village inspired by the teachings of Osho, centred on meditation, silent retreats and satsang. Strongly recommended by a friend.',
+        practical: 'retreats from ~US$1,000/week incl. lodging · volunteer exchange: ~25 h/week for meals and a bed',
+        links: [{ text: 'pachamama.com', url: 'https://www.pachamama.com/' }]
+    },
+    {
+        id: 'vitalia',
+        name: 'Vitalia',
+        place: 'Roatán, Honduras',
+        category: 'own',
+        lat: 16.3700,
+        lng: -86.4400,
+        status: 'notyet',
+        priceFrom: 830,
+        why: 'A pop-up city inside the Próspera special economic zone on Roatán, focused on longevity biotech, crypto cities and human enhancement. Draws founders, scientists and engineers working on frontier technology, and has a distinctive culture of its own.',
+        practical: 'Citizen Pass US$1,000 plus housing from ~US$900/month · check the site for current dates',
+        links: [{ text: 'vitalia.city', url: 'https://vitalia.city/' }]
+    }
+];
+
+/**
+ * DIRECTORIES — lists of lists, shown at the bottom of the page.
+ */
+const colivingDirectories = [
+    {
+        name: 'Coliven',
+        url: 'https://coliven.com/communities',
+        description: 'A searchable directory of co-living communities worldwide.'
+    },
+    {
+        name: 'ALIKE?',
+        url: 'https://pad.totalism.org/p/alike',
+        description: 'An open, community-edited list of hackbases, nomad bases, free-living spots and residencies.'
+    },
+    {
+        name: 'Freeing Space',
+        url: 'https://freeingspace.com/',
+        description: 'A map documenting communes, cooperatives and other spaces organised outside the market economy.'
+    },
+    {
+        name: 'WWOOF',
+        url: 'https://wwoof.net/',
+        description: 'A worldwide network of organic farms that host volunteers in exchange for food and lodging.'
     }
 ];
