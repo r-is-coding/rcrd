@@ -83,8 +83,8 @@ const colivingSpaces = [
         name: 'The Garden',
         place: 'Deocriste, northern Portugal',
         category: 'garden',
-        lat: 41.6905,
-        lng: -8.7044,
+        lat: 41.6780,  // south of the village, towards the Lima
+        lng: -8.7050,
         status: 'been',
         priceFrom: 950,
         when: 'back again May–Aug',
