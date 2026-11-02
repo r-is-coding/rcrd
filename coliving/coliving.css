@@ -477,3 +477,4 @@ body {
 .text-toggle:hover { color: var(--text); border-bottom-color: var(--text); }
 .text-toggle.is-active { color: var(--text); border-bottom: 1px solid var(--text); --c: var(--text); }
 .sort-toggle { margin-left: auto; }
+.filter-row[hidden], .text-toggle[hidden] { display: none; }

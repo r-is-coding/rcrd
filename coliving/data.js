@@ -10,6 +10,8 @@
  * - short: label on the filter chip
  * - color: dot / heading color
  * - description: shown under the heading (\n\n for a new paragraph)
+ * - compareCost: set false to leave the group out of the budget filter
+ *                and price sort (e.g. retreat centres)
  */
 const colivingCategories = [
     {
@@ -52,7 +54,8 @@ const colivingCategories = [
         name: 'Meditation',
         short: 'meditation',
         color: '#f5e6c4',
-        description: 'Retreat centres and monasteries, mostly in the Theravada and insight traditions. Not co-living in the usual sense, but places to stay a while and go inward.'
+        description: 'Retreat centres and monasteries, mostly in the Theravada and insight traditions. Not co-living in the usual sense, but places to stay a while and go inward.',
+        compareCost: false // retreats are priced per course, not per month: left out of the budget filter and price sort
     }
 ];
 
@@ -69,8 +72,7 @@ const colivingCategories = [
  * - practical: optional one line of price / stay / how to get in
  * - priceFrom: rough € per month for the cheapest option, used for
  *              'sort by price' and the budget filter (0 = free / donation
- *              / work exchange; leave out if unknown). For retreat centres
- *              it's the per-day cost scaled to a month.
+ *              / work exchange; leave out if unknown)
  * - suggestedBy: name of whoever proposed it, if it came from the form
  * - goodFor, notFor, tags: optional lists
  * - links: optional [{ text, url }]
@@ -405,7 +407,6 @@ const colivingSpaces = [
         lng: 99.1680,
         status: 'notyet',
         why: 'The international hermitage of Suan Mokkh, founded by Buddhadāsa Bhikkhu, in a coconut grove in southern Thailand. Runs a 10-day silent retreat every month, teaching mindfulness of breathing and the core of the Buddha\'s teaching.',
-        priceFrom: 160,
         practical: '2,000 baht (~€55) for the full 10 days, room and two vegetarian meals a day included · starts the 1st of each month · register in person the day before; no advance booking',
         links: [{ text: 'suanmokkh-idh.org', url: 'https://www.suanmokkh-idh.org/' }]
     },
@@ -418,7 +419,6 @@ const colivingSpaces = [
         lng: 99.9650,
         status: 'notyet',
         why: 'A meditation retreat centre on Koh Phangan led by former monk Anthony Markwell, teaching Buddhist meditation from the Southeast Asian monastic tradition. Mostly Vipassana retreats of 7 to 21 days.',
-        priceFrom: 1300,
         practical: 'roughly US$350 for 7 days to US$700 for 16, bungalow and two vegetarian meals a day included · 7–21 day retreats · book online',
         links: [{ text: 'indriyaretreat.com', url: 'https://indriyaretreat.com/' }]
     }

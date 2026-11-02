@@ -239,8 +239,20 @@
         return filter.category !== 'all' || filter.beenOnly || filter.budget != null;
     }
 
+    // Some groups (retreat centres) aren't priced per month, so they sit
+    // out of the budget filter and the price sort.
+    function comparable(space) {
+        return categories.get(space.category)?.compareCost !== false;
+    }
+
+    // A group that isn't compared by cost (e.g. meditation) is shown as is
+    function costlessView() {
+        return filter.category !== 'all' && categories.get(filter.category)?.compareCost === false;
+    }
+
     function withinBudget(space) {
-        return filter.budget == null || (space.priceFrom != null && space.priceFrom <= filter.budget);
+        if (costlessView() || (filter.budget == null && filter.sort !== 'price')) return true;
+        return comparable(space) && (filter.budget == null || (space.priceFrom != null && space.priceFrom <= filter.budget));
     }
 
     // Europe is home: if any shown places are in Europe, frame just those.
@@ -278,13 +290,15 @@
     function applyFilter({ fit = true } = {}) {
         const visibleCount = new Map();
         const points = [];
+        const costless = costlessView();
+        const byPrice = filter.sort === 'price' && !costless;
         let unpriced = 0; // places the budget filter leaves out for lack of a price
         entries.forEach(entry => {
             const s = entry.space;
             const inScope = (filter.category === 'all' || s.category === filter.category) &&
                             (!filter.beenOnly || s.status === 'been');
             const show = inScope && withinBudget(s);
-            if (inScope && filter.budget != null && s.priceFrom == null) unpriced++;
+            if (inScope && filter.budget != null && comparable(s) && s.priceFrom == null) unpriced++;
             entry.$item.hidden = !show;
             if (show) {
                 entry.marker.addTo(map);
@@ -296,19 +310,23 @@
             }
         });
         arrange();
-        groups.forEach(($group, id) => { $group.hidden = filter.sort === 'price' || !visibleCount.get(id); });
-        $priceGroup.hidden = filter.sort !== 'price' || !points.length;
-        $list.classList.toggle('by-price', filter.sort === 'price');
+        groups.forEach(($group, id) => { $group.hidden = byPrice || !visibleCount.get(id); });
+        $priceGroup.hidden = !byPrice || !points.length;
+        $list.classList.toggle('by-price', byPrice);
         $sort.textContent = filter.sort === 'price' ? 'sort by vibe ↕' : 'sort by price ↕';
 
         $catRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x.dataset.category === filter.category));
         $been.classList.toggle('is-active', filter.beenOnly);
         $been.setAttribute('aria-pressed', String(filter.beenOnly));
         $budgetRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', Number(x.dataset.budget) === filter.budget));
-        $budgetNote.hidden = !unpriced;
-        $budgetNote.textContent = unpriced === 1
-            ? "1 place publishes no price, so it's left out"
-            : `${unpriced} places publish no price, so they're left out`;
+        const notes = [];
+        if (unpriced) notes.push(unpriced === 1 ? "1 place publishes no price, so it's left out" : `${unpriced} places publish no price, so they're left out`);
+        if (!costless && (filter.budget != null || byPrice)) notes.push('meditation centres are priced per retreat, so they sit this one out');
+        $budgetNote.hidden = !notes.length;
+        $budgetNote.textContent = notes.join(' · ');
+        // No point offering a budget when the chosen group isn't compared by cost
+        $budgetRow.hidden = costless;
+        $sort.hidden = costless;
         $reset.hidden = !isFiltered();
         if (fit) fitTo(points);
     }
@@ -408,7 +426,7 @@
     // Moves each card into its category group, or into one list sorted
     // by price. Places with no known price go last.
     function arrange() {
-        if (filter.sort === 'price') {
+        if (filter.sort === 'price' && !costlessView()) {
             [...entries.values()]
                 .sort((a, b) => (a.space.priceFrom ?? Infinity) - (b.space.priceFrom ?? Infinity))
                 .forEach(e => $priceList.appendChild(e.$item));
@@ -443,7 +461,7 @@
 
     const $priceGroup = el('li', 'group group-price');
     $priceGroup.appendChild(el('h2', 'group-title', 'cheapest first'));
-    $priceGroup.appendChild(paragraphs("Rough monthly cost of the cheapest option, often a dorm, a tent or a work exchange. What's included (meals, VAT) varies, so open a card for details.", 'group-desc'));
+    $priceGroup.appendChild(paragraphs("Rough monthly cost of the cheapest option, often a dorm, a tent or a work exchange. What's included (meals, VAT) varies, so open a card for details. Meditation centres are priced per retreat, so they're not in this list.", 'group-desc'));
     const $priceList = el('ol', 'places');
     $priceGroup.appendChild($priceList);
     $priceGroup.hidden = true;
