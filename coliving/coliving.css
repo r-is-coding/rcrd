@@ -327,8 +327,18 @@ body {
     color: var(--text-faint);
     margin-right: 0.2rem;
 }
-.place-price { display: none; color: var(--text-dim); }
-.by-price .place-price { display: block; }
+.place-price { display: block; color: var(--text-dim); }
+.place-price.is-unknown { display: none; color: var(--text-faint); }
+.by-price .place-price.is-unknown { display: block; }
+.budget-row .sort-label { margin-right: 0.3rem; }
+.budget-note {
+    margin: -0.3rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+}
+.budget-note[hidden] { display: none; }
 .group-price { --c: var(--text); }
 .place-suggested { font-style: normal; }
 

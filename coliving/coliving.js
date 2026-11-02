@@ -122,7 +122,8 @@
     const $filters = document.getElementById('filters');
     const entries = new Map(); // id → { space, marker, $item }
     const groups = new Map();  // category id → $group
-    const filter = { category: 'all', beenOnly: false, sort: 'vibe' };
+    const filter = { category: 'all', beenOnly: false, sort: 'vibe', budget: null };
+    const BUDGETS = [500, 1000, 1500]; // € per month, for the budget chips
     let activeId = null;
 
     function el(tag, className, text) {
@@ -166,9 +167,9 @@
         $head.appendChild(el('span', 'place-meta', meta));
         if (space.verdict) $head.appendChild(el('span', 'place-verdict', space.verdict));
         if (space.suggestedBy) $head.appendChild(el('span', 'place-meta place-suggested', `suggested by ${space.suggestedBy}`));
-        // Shown only when sorting by price
-        const price = space.priceFrom == null ? 'price unknown' : space.priceFrom === 0 ? 'free / donation' : `from ~€${space.priceFrom.toLocaleString('en')}/month`;
-        $head.appendChild(el('span', 'place-meta place-price', price));
+        // Unknown prices only show up when sorting by price
+        const price = space.priceFrom == null ? 'price not published' : space.priceFrom === 0 ? 'free, by donation or work exchange' : `from ~€${space.priceFrom.toLocaleString('en')}/month`;
+        $head.appendChild(el('span', `place-meta place-price${space.priceFrom == null ? ' is-unknown' : ''}`, price));
         $item.appendChild($head);
 
         const $body = el('div', 'place-body');
@@ -235,7 +236,11 @@
     }
 
     function isFiltered() {
-        return filter.category !== 'all' || filter.beenOnly;
+        return filter.category !== 'all' || filter.beenOnly || filter.budget != null;
+    }
+
+    function withinBudget(space) {
+        return filter.budget == null || (space.priceFrom != null && space.priceFrom <= filter.budget);
     }
 
     // Europe is home: if any shown places are in Europe, frame just those.
@@ -273,10 +278,13 @@
     function applyFilter({ fit = true } = {}) {
         const visibleCount = new Map();
         const points = [];
+        let unpriced = 0; // places the budget filter leaves out for lack of a price
         entries.forEach(entry => {
             const s = entry.space;
-            const show = (filter.category === 'all' || s.category === filter.category) &&
-                         (!filter.beenOnly || s.status === 'been');
+            const inScope = (filter.category === 'all' || s.category === filter.category) &&
+                            (!filter.beenOnly || s.status === 'been');
+            const show = inScope && withinBudget(s);
+            if (inScope && filter.budget != null && s.priceFrom == null) unpriced++;
             entry.$item.hidden = !show;
             if (show) {
                 entry.marker.addTo(map);
@@ -296,6 +304,11 @@
         $catRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', x.dataset.category === filter.category));
         $been.classList.toggle('is-active', filter.beenOnly);
         $been.setAttribute('aria-pressed', String(filter.beenOnly));
+        $budgetRow.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-active', Number(x.dataset.budget) === filter.budget));
+        $budgetNote.hidden = !unpriced;
+        $budgetNote.textContent = unpriced === 1
+            ? "1 place publishes no price, so it's left out"
+            : `${unpriced} places publish no price, so they're left out`;
         $reset.hidden = !isFiltered();
         if (fit) fitTo(points);
     }
@@ -306,15 +319,18 @@
         const parts = [];
         if (filter.category !== 'all') parts.push(filter.category);
         if (filter.beenOnly) parts.push('been');
+        if (filter.budget != null) parts.push('under' + filter.budget);
         if (filter.sort === 'price') parts.push('price');
         return parts.length ? '#' + parts.join('+') : '';
     }
 
     function filterFromHash() {
         const parts = location.hash.replace(/^#/, '').split('+').filter(Boolean);
+        const under = parts.map(p => /^under(\d+)$/.exec(p)).find(Boolean);
         return {
             category: parts.find(p => categories.has(p)) || 'all',
             beenOnly: parts.includes('been'),
+            budget: under && BUDGETS.includes(Number(under[1])) ? Number(under[1]) : null,
             sort: parts.includes('price') ? 'price' : 'vibe'
         };
     }
@@ -348,7 +364,7 @@
     const $reset = el('button', 'reset', '← all places');
     $reset.type = 'button';
     $reset.hidden = true;
-    $reset.addEventListener('click', () => setFilter({ category: 'all', beenOnly: false }));
+    $reset.addEventListener('click', () => setFilter({ category: 'all', beenOnly: false, budget: null }));
 
     // Category chips: click to filter, click again to show all
     const $catRow = el('div', 'filter-row');
@@ -372,7 +388,22 @@
     $sort.addEventListener('click', () => setFilter({ sort: filter.sort === 'price' ? 'vibe' : 'price' }));
     $metaRow.append($been, $notYet, $sort);
 
-    $filters.append($catRow, $metaRow, $reset);
+    // Budget chips: "under €1,000/month" and so on. Picking one also sorts
+    // by price, since that's the view you want when money is the question.
+    const $budgetRow = el('div', 'filter-row budget-row');
+    $budgetRow.appendChild(el('span', 'sort-label', 'budget'));
+    BUDGETS.forEach(limit => {
+        const $c = chip(`under €${limit.toLocaleString('en')}/mo`, null, () => {
+            const off = filter.budget === limit;
+            setFilter({ budget: off ? null : limit, sort: off ? filter.sort : 'price' });
+        });
+        $c.dataset.budget = limit;
+        $budgetRow.appendChild($c);
+    });
+    const $budgetNote = el('p', 'budget-note');
+    $budgetNote.hidden = true;
+
+    $filters.append($catRow, $budgetRow, $metaRow, $budgetNote, $reset);
 
     // Moves each card into its category group, or into one list sorted
     // by price. Places with no known price go last.
@@ -412,7 +443,7 @@
 
     const $priceGroup = el('li', 'group group-price');
     $priceGroup.appendChild(el('h2', 'group-title', 'cheapest first'));
-    $priceGroup.appendChild(paragraphs("Rough monthly cost of the cheapest option. What's included (meals, VAT) varies, so open a card for details.", 'group-desc'));
+    $priceGroup.appendChild(paragraphs("Rough monthly cost of the cheapest option, often a dorm, a tent or a work exchange. What's included (meals, VAT) varies, so open a card for details.", 'group-desc'));
     const $priceList = el('ol', 'places');
     $priceGroup.appendChild($priceList);
     $priceGroup.hidden = true;

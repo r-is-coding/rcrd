@@ -68,7 +68,9 @@ const colivingCategories = [
  * - why: what it is and who it suits (\n\n = new paragraph)
  * - practical: optional one line of price / stay / how to get in
  * - priceFrom: rough € per month for the cheapest option, used for
- *              'sort by price' (0 = free / donation, leave out if unknown)
+ *              'sort by price' and the budget filter (0 = free / donation
+ *              / work exchange; leave out if unknown). For retreat centres
+ *              it's the per-day cost scaled to a month.
  * - suggestedBy: name of whoever proposed it, if it came from the form
  * - goodFor, notFor, tags: optional lists
  * - links: optional [{ text, url }]
@@ -166,7 +168,7 @@ const colivingSpaces = [
         lng: 2.5400,
         status: 'notyet',
         why: 'A restored forest villa near Barcelona, similar to The Garden but with a fuller programme of workshops and events, at a somewhat higher price. Run by a married couple, including Richard D. Bartlett.',
-        practical: '1 week to 1 month stays',
+        practical: '1 week to 1 month stays · no prices published, email to ask',
         links: [{ text: 'eltilo.casa', url: 'https://www.eltilo.casa/' }]
     },
     {
@@ -177,8 +179,9 @@ const colivingSpaces = [
         lat: 38.0200,
         lng: -8.5800,
         status: 'notyet',
+        priceFrom: 120,
         why: 'A regenerative village in the Alentejo, similar to The Garden but more ascetic and more focused on farming.',
-        practical: 'book through the site',
+        practical: 'volunteers: mornings 9–1 for a dorm bed or camping spot and meals, €4/day for utilities · rooms, cabins and camping bookable on the site, prices on request',
         links: [{ text: 'traditionaldreamfactory.com', url: 'https://www.traditionaldreamfactory.com/' }]
     },
 
@@ -207,9 +210,9 @@ const colivingSpaces = [
         status: 'been',
         priceFrom: 0,
         verdict: 'highly recommended for the right person',
-        why: 'A former hotel in Blackpool offering free or subsidised housing to people working on pressing global problems, especially AI safety. Ideal for working on a minimal budget.',
+        why: 'A former hotel in Blackpool that houses and feeds people working on pressing global problems, especially AI safety, for free. Some grantees also get a stipend. Ideal for working on a minimal budget.',
         goodFor: ['founders of a new project, startup or charity', 'AI safety researchers'],
-        practical: 'free to £900/month for grantees, £30+/night self-funded · apply',
+        practical: 'grantees: room and vegan food free (sliding scale up to £900/month), stipend possible, if your project is impactful enough · self-funded from £30/night · up to 12 months · apply',
         links: [{ text: 'ceealar.org', url: 'https://www.ceealar.org/' }]
     },
 
@@ -252,8 +255,9 @@ const colivingSpaces = [
         lat: 53.1460,
         lng: -4.1210,
         status: 'been',
+        priceFrom: 1700,
         why: 'A collective in a converted chapel in Snowdonia that combines co-living, coworking and retreats. Hosts residencies for artists and technologists, with a focus on AI, creativity and regeneration, and runs immersive retreats for mission-driven teams.',
-        practical: 'book a call to ask about prices and residencies',
+        practical: '£50/night when last checked · residencies for artists and technologists · book a call',
         links: [{ text: 'astralship.org', url: 'https://astralship.org/' }]
     },
 
@@ -307,7 +311,7 @@ const colivingSpaces = [
         lng: -2.3600,
         status: 'notyet',
         why: 'Coliving in an 18th-century family house in an Andalusian mountain village, with home-cooked meals, workshops and excursions.',
-        practical: '2 to 8 weeks',
+        practical: 'breakfast, workstations and excursions included · 2 to 8 weeks · prices on request',
         links: [{ text: 'picassacoliving.com', url: 'https://picassacoliving.com/' }]
     },
 
@@ -320,8 +324,9 @@ const colivingSpaces = [
         lat: 38.5600,
         lng: -8.9300,
         status: 'notyet',
+        priceFrom: 900,
         why: 'A cooperative-run venue in a valley of the Arrábida natural park, south of Lisbon, centred on contact improvisation: weekly classes, a regular jam and dance and meditation retreats. A core team of eight lives on site with a rotating group of volunteers.',
-        practical: 'join as a volunteer (incl. European Solidarity Corps), a member or through the Community Experience · no prices published',
+        practical: 'Community Experience: €25–40/night by accommodation (own tent to private room), sliding ±€5, plus €40/week for food · 4 nights minimum · also volunteering and European Solidarity Corps placements',
         links: [{ text: 'servivo.earth', url: 'https://www.servivo.earth/' }]
     },
     {
@@ -332,8 +337,9 @@ const colivingSpaces = [
         lat: 37.1200,
         lng: -8.6800,
         status: 'notyet',
+        priceFrom: 0,
         why: 'An eco-community in the Algarve where residents share gardening, plant-based cooking and building, and the programme runs to ecstatic dance, contact dance, sound healing, yoga and singing circles.',
-        practical: 'guest stays and volunteering · enquire through the site',
+        practical: 'volunteers: 5 h/day, 5 days a week for a bed and all meals, 2 months minimum · guests: yurt, glamping tent or own van, prices on request',
         links: [{ text: 'cristalandlagos.com', url: 'https://www.cristalandlagos.com/' }]
     },
 
@@ -346,8 +352,9 @@ const colivingSpaces = [
         lat: 10.0300,
         lng: -85.7000,
         status: 'notyet',
+        priceFrom: 60,
         why: 'A spiritual eco-village inspired by the teachings of Osho, centred on meditation, silent retreats and satsang. Strongly recommended by a friend.',
-        practical: 'retreats from ~US$1,000/week incl. lodging · volunteer exchange: ~25 h/week for meals and a bed',
+        practical: 'guests from US$48/night plus tax, meals paid by weight (~US$11–17 each), 7 nights minimum, 15% off from 20 nights · volunteers: ~25 h/week for lunch, dinner soup and camping at US$1–2/night or a casita at US$12–15, 6 weeks minimum',
         links: [{ text: 'pachamama.com', url: 'https://www.pachamama.com/' }]
     },
     {
@@ -374,7 +381,7 @@ const colivingSpaces = [
         lng: 24.7600,
         status: 'been',
         why: 'A Theravada forest monastery on Aegna island, off Tallinn, with weekend meditation retreats, courses and study groups.',
-        practical: 'donation-based · register for activities on the site',
+        practical: 'weekend retreats by donation, ~€160 in a shared room or €250 single, meals included, plus €35 for the boat from October to May · register on the site',
         links: [{ text: 'sangha.ee', url: 'https://sangha.ee/' }]
     },
     {
@@ -386,7 +393,7 @@ const colivingSpaces = [
         lng: -3.6600,
         status: 'notyet',
         why: 'A charity retreat centre in Devon offering silent insight meditation retreats in the Buddhist tradition: group retreats, personal retreats and service retreats.',
-        practical: 'retreat rates plus dana · work-exchange (Dharma Service) retreats and residential coordinator roles',
+        practical: 'group retreats at a standard, basic or supported rate, 70% off for ages 18–25 · personal retreats from 2 nights to 3 months, priced on the site · Dharma Service retreats: 5 h/day of work for a low-cost stay of 2 weeks to 3 months',
         links: [{ text: 'gaiahouse.co.uk', url: 'https://gaiahouse.co.uk/' }]
     },
     {
@@ -398,7 +405,8 @@ const colivingSpaces = [
         lng: 99.1680,
         status: 'notyet',
         why: 'The international hermitage of Suan Mokkh, founded by Buddhadāsa Bhikkhu, in a coconut grove in southern Thailand. Runs a 10-day silent retreat every month, teaching mindfulness of breathing and the core of the Buddha\'s teaching.',
-        practical: '10-day silent retreat from the 1st of each month · register in person the day before; no advance booking',
+        priceFrom: 160,
+        practical: '2,000 baht (~€55) for the full 10 days, room and two vegetarian meals a day included · starts the 1st of each month · register in person the day before; no advance booking',
         links: [{ text: 'suanmokkh-idh.org', url: 'https://www.suanmokkh-idh.org/' }]
     },
     {
@@ -410,7 +418,8 @@ const colivingSpaces = [
         lng: 99.9650,
         status: 'notyet',
         why: 'A meditation retreat centre on Koh Phangan led by former monk Anthony Markwell, teaching Buddhist meditation from the Southeast Asian monastic tradition. Mostly Vipassana retreats of 7 to 21 days.',
-        practical: '7–21 day retreats · book online',
+        priceFrom: 1300,
+        practical: 'roughly US$350 for 7 days to US$700 for 16, bungalow and two vegetarian meals a day included · 7–21 day retreats · book online',
         links: [{ text: 'indriyaretreat.com', url: 'https://indriyaretreat.com/' }]
     }
 ];
