@@ -140,7 +140,8 @@ const colivingSpaces = [
         lat: 41.45,  // placeholder: exact location unknown
         lng: -8.2,
         status: 'notyet',
-        why: 'A place in northern Portugal with some overlap in people with The Garden. No public website.',
+        why: 'A young community in northern Portugal, still being built, with a small core group and plenty of overlap in people with The Garden. It is not clear whether residents are being taken in yet, but more and more is happening there, so it is worth asking.',
+        practical: 'no public website yet · ask through the Garden community',
         links: []
     },
     {
@@ -264,10 +265,11 @@ const colivingSpaces = [
         category: 'coworking',
         lat: 39.6580,
         lng: -0.4250,
-        status: 'notyet',
+        status: 'been',
         priceFrom: 1200,
-        why: 'A 14-room mountain villa outside Valencia built around remote work, with a coworking space, pool and shared dinners. Alcohol-free.',
-        practical: '€1,200–2,100/month · 1 month minimum',
+        why: 'A 16-room mountain villa outside Valencia built squarely around remote work: coworking desks with dual screens, a pool and a gym, plus shared dinners most nights. Alcohol-free on the property.',
+        notFor: ['anyone after a sauna: there is none'],
+        practical: 'rooms €1,200–2,100/month, food not included · 1 month minimum',
         links: [{ text: 'savicoliving.com', url: 'https://savicoliving.com/' }]
     },
     {
@@ -307,6 +309,32 @@ const colivingSpaces = [
         why: 'Coliving in an 18th-century family house in an Andalusian mountain village, with home-cooked meals, workshops and excursions.',
         practical: '2 to 8 weeks',
         links: [{ text: 'picassacoliving.com', url: 'https://picassacoliving.com/' }]
+    },
+
+    // ── Contact improvisation / dance ──────────────────────────
+    {
+        id: 'servivo',
+        name: 'SerVivo',
+        place: 'Vale dos Barris, Palmela, near Lisbon',
+        category: 'garden',
+        lat: 38.5600,
+        lng: -8.9300,
+        status: 'notyet',
+        why: 'A cooperative-run venue in a valley of the Arrábida natural park, south of Lisbon, centred on contact improvisation: weekly classes, a regular jam and dance and meditation retreats. A core team of eight lives on site with a rotating group of volunteers.',
+        practical: 'join as a volunteer (incl. European Solidarity Corps), a member or through the Community Experience · no prices published',
+        links: [{ text: 'servivo.earth', url: 'https://www.servivo.earth/' }]
+    },
+    {
+        id: 'cristaland-lagos',
+        name: 'Cristaland Lagos',
+        place: 'Lagos, Algarve, Portugal',
+        category: 'garden',
+        lat: 37.1200,
+        lng: -8.6800,
+        status: 'notyet',
+        why: 'An eco-community in the Algarve where residents share gardening, plant-based cooking and building, and the programme runs to ecstatic dance, contact dance, sound healing, yoga and singing circles. Looks very much on the hippie side of the spectrum; whether the peace tips into spiritual bypassing is something to check in person.',
+        practical: 'guest stays and volunteering · enquire through the site',
+        links: [{ text: 'cristalandlagos.com', url: 'https://www.cristalandlagos.com/' }]
     },
 
     // ── further afield (hippie-rationalist) ─────────────────────
