@@ -332,7 +332,7 @@ const colivingSpaces = [
         lat: 37.1200,
         lng: -8.6800,
         status: 'notyet',
-        why: 'An eco-community in the Algarve where residents share gardening, plant-based cooking and building, and the programme runs to ecstatic dance, contact dance, sound healing, yoga and singing circles. Looks very much on the hippie side of the spectrum; whether the peace tips into spiritual bypassing is something to check in person.',
+        why: 'An eco-community in the Algarve where residents share gardening, plant-based cooking and building, and the programme runs to ecstatic dance, contact dance, sound healing, yoga and singing circles.',
         practical: 'guest stays and volunteering · enquire through the site',
         links: [{ text: 'cristalandlagos.com', url: 'https://www.cristalandlagos.com/' }]
     },
@@ -372,7 +372,7 @@ const colivingSpaces = [
         category: 'meditation',
         lat: 59.5850,
         lng: 24.7600,
-        status: 'notyet',
+        status: 'been',
         why: 'A Theravada forest monastery on Aegna island, off Tallinn, with weekend meditation retreats, courses and study groups.',
         practical: 'donation-based · register for activities on the site',
         links: [{ text: 'sangha.ee', url: 'https://sangha.ee/' }]
