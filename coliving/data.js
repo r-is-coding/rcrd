@@ -411,6 +411,18 @@ const colivingSpaces = [
         links: [{ text: 'suanmokkh-idh.org', url: 'https://www.suanmokkh-idh.org/' }]
     },
     {
+        id: 'dipabhavan',
+        name: 'Dipabhāvan Meditation Center',
+        place: 'Maret, Koh Samui, Thailand',
+        category: 'meditation',
+        lat: 9.4720,  // approximate: on the hillside above the ring road near Lamai
+        lng: 100.0280,
+        status: 'notyet',
+        why: 'A Suan Mokkh branch on a forested hillside on Koh Samui, teaching in the tradition of Buddhadāsa Bhikkhu. Runs silent retreats in mindfulness of breathing (ānāpānasati), with all instruction in English.',
+        practical: 'no course fee, donations welcome · 7-day retreats starting the 11th and 20th of each month, plus a 3-day course from the 8th · book online up to 4 months ahead; often full',
+        links: [{ text: 'dipabhavan.org', url: 'https://main.dipabhavan.net/en' }]
+    },
+    {
         id: 'indriya',
         name: 'Indriya Retreat',
         place: 'Koh Phangan, Thailand',
