@@ -433,6 +433,18 @@ const colivingSpaces = [
         why: 'A meditation retreat centre on Koh Phangan led by former monk Anthony Markwell, teaching Buddhist meditation from the Southeast Asian monastic tradition. Mostly Vipassana retreats of 7 to 21 days.',
         practical: 'roughly US$350 for 7 days to US$700 for 16, bungalow and two vegetarian meals a day included · 7–21 day retreats · book online',
         links: [{ text: 'indriyaretreat.com', url: 'https://indriyaretreat.com/' }]
+    },
+    {
+        id: 'nameless-mountain',
+        name: 'Nameless Mountain',
+        place: 'Boulder, Colorado, USA',
+        category: 'meditation',
+        lat: 40.0150,  // approximate: town-level, no venue address published
+        lng: -105.2705,
+        status: 'notyet',
+        why: 'A rationalist-adjacent, Dharma-based spiritual centre founded in 2025 by Vivid Void (Gabe Broussard). Offers meditation, Dharma teaching and psychological education with a meta-rational bent, rooted in lay and householder lineages rather than monastic ones.',
+        practical: 'no events running for now; online events resume in 2027, with prices and suggested donations to be posted then · no residency yet, though one may follow a move to a larger venue',
+        links: [{ text: 'namelessmountain.org', url: 'https://www.namelessmountain.org/about' }]
     }
 ];
 
