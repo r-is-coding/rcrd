@@ -442,8 +442,8 @@ const colivingSpaces = [
         lat: 40.0150,  // approximate: town-level, no venue address published
         lng: -105.2705,
         status: 'notyet',
-        why: 'A rationalist-adjacent, Dharma-based spiritual centre founded in 2025 by Vivid Void (Gabe Broussard). Offers meditation, Dharma teaching and psychological education with a meta-rational bent, rooted in lay and householder lineages rather than monastic ones.',
-        practical: 'no events running for now; online events resume in 2027, with prices and suggested donations to be posted then · no residency yet, though one may follow a move to a larger venue',
+        why: 'A rationalist-adjacent, Dharma-based spiritual centre founded in 2025 by Vivid Void (Gabe Broussard). Offers meditation, Dharma teaching and psychological education with a meta-rational bent, rooted in lay and householder lineages rather than monastic ones.\n\nRuns in-person silent retreats, such as the nine-day Jhana & Awakening Retreat in November 2026, taught by Wystan Bryant-Scott. It covered breath and metta practice, the jhanas, insight, and pointers into Zen and Mahamudra.',
+        practical: 'retreats in Boulder, with an option to join some sessions online over Zoom · no prices published yet; the site says prices and suggested donations will be posted in 2027 · no residency, though one may follow a move to a larger venue',
         links: [{ text: 'namelessmountain.org', url: 'https://www.namelessmountain.org/about' }]
     }
 ];
